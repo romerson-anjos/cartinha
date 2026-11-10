@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Letra animada 💖</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 50% 30%, #3b0a14, #12020a 70%);
+    overflow: hidden;
+    font-family: 'Georgia', serif;
+    color: #ffc2d9;
+  }
+
+  #palco {
+    position: relative;
+    z-index: 2;
+    width: min(92vw, 720px);
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .linha {
+    display: none;
+    font-size: clamp(26px, 5vw, 46px);
+    line-height: 1.4;
+    text-shadow: 0 0 12px rgba(255, 60, 110, .8), 0 0 30px rgba(255, 30, 90, .5);
+  }
+  .linha.ativa { display: block; }
+
+  .palavra {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .35s ease, transform .35s ease;
+    margin: 0 .12em;
+  }
+  .palavra.vis {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  #controles {
+    position: relative;
+    z-index: 2;
+    margin-top: 30px;
+  }
+  #controles button {
+    padding: 10px 26px;
+    font-size: 16px;
+    border: none;
+    border-radius: 30px;
+    background: #c1121f;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 0 16px rgba(230, 57, 70, .6);
+  }
+  #controles button:hover { background: #e63946; }
+
+  .coracao {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    animation: flutuar linear forwards;
+  }
+  @keyframes flutuar {
+    0%   { opacity: 0; transform: translateY(0) scale(.5) rotate(-10deg); }
+    25%  { opacity: .9; }
+    70%  { opacity: .7; }
+    100% { opacity: 0; transform: translateY(-80px) scale(1.15) rotate(10deg); }
+  }
+
+  /* ===== Tela de carta ===== */
+  #carta {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    background: radial-gradient(circle at 50% 30%, #3b0a14, #12020a 70%);
+    transition: opacity .8s ease, visibility .8s;
+  }
+  #carta.oculta { opacity: 0; visibility: hidden; }
+
+  .envelope {
+    position: relative;
+    width: min(80vw, 340px);
+    height: 220px;
+    cursor: pointer;
+    animation: flutuarEnvelope 3s ease-in-out infinite;
+  }
+  @keyframes flutuarEnvelope {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
+  }
+
+  .envelope .corpo {
+    position: absolute;
+    inset: 0;
+    background: #fff0f5;
+    border-radius: 14px;
+    box-shadow: 0 0 24px rgba(255, 60, 110, .5);
+    overflow: hidden;
+  }
+  .envelope .aba {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 28%;
+    background: #ffc2d9;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform .8s ease;
+    z-index: 2;
+  }
+  .envelope .selo {
+    position: absolute;
+    left: 50%; bottom: 14px;
+    transform: translateX(-50%);
+    font-size: 34px;
+    z-index: 4;
+    transition: opacity .4s;
+  }
+  .envelope.aberto .aba { transform: rotateX(180deg); }
+  .envelope.aberto .selo { opacity: 0; }
+
+  .envelope .carta-papel {
+    position: absolute;
+    left: 10px; right: 10px; top: 30px;
+    height: 160px;
+    background: #fff;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: 'Georgia', serif;
+    color: #7a0f2e;
+    text-align: center;
+    transform: translateY(0);
+    transition: transform 1s ease .3s;
+    z-index: 3;
+  }
+  .envelope.aberto .carta-papel { transform: translateY(-120px); }
+  .carta-papel h2 { font-size: 22px; margin-bottom: 8px; }
+  .carta-papel p { font-size: 15px; line-height: 1.5; }
+
+  #carta .dica {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ffc2d9;
+    font-family: 'Georgia', serif;
+    font-style: italic;
+    font-size: 15px;
+    opacity: .85;
+  }
+</style>
+</head>
+<body>
+
+<div id="carta">
+  <div class="envelope" id="envelope">
+    <div class="corpo"></div>
+    <div class="carta-papel">
+      <h2>Para você</h2>
+      <p>Isso é pra você Wandinha kkkkkkk.<br>Abra com carinho 💌</p>
+    </div>
+    <div class="aba"></div>
+    <div class="selo">💖</div>
+  </div>
+  <div class="dica">toque no envelope para abrir</div>
+</div>
+
+<div id="palco"></div>
+
+<div id="controles">
+  <button id="btnIniciar">▶ Começar</button>
+</div>
+
+<script>
+  // ==========================================================
+  //  👇 EDITE AQUI 👇
+  //  tempo: segundo (número) em que a linha começa
+  //  texto: o que aparece na tela
+  //  Os tempos precisam estar em ordem crescente.
+  // ==========================================================
+  const LINHAS = [
+    { tempo: 3.5,    texto: "O quarto meio escuro, a janela aberta" },
+    { tempo: 5.5,    texto: "A porta encostada, a Lua está tão bela" },
+    { tempo: 9.5,    texto: "E eu tô aqui sentindo falta de você" },
+    { tempo: 13.5,   texto: "Já vi todos os filmes, li todos os livros" },
+    { tempo: 16.5,   texto: "E tô esperando a próxima novela" },
+    { tempo: 19.5,   texto: "Tudo porque eu tô tentando te esquecer" },
+    { tempo: 25.5,   texto: "E em qualquer lugar que eu vou" },
+    { tempo: 27.5,   texto: "Onde você está, eu estou, oh ohoh oh ohoh" },
+    { tempo: 34.5,   texto: "O meu pensamento te segue" },
+    { tempo: 36.5,   texto: "Minha saudade te persegue" },
+    { tempo: 39.5,   texto: "O meu amor não envelhece" },
+    { tempo: 41.5,   texto: "Cê não sai da minha mente" },
+    { tempo: 44.5,   texto: "É que você me causa febre" },
+    { tempo: 47.5,   texto: "De uns 40 graus ou um pouco mais" },
+    { tempo: 49.5,   texto: "Eu quero é você, eu amo só você" },
+    { tempo: 54.5,   texto: "E o resto tanto faz, tanto faz" },
+    { tempo: 59.5,   texto: "Espero que goste 😉" },
+    
+  ];
+
+
+  const AUDIO_SRC = "ssstik.io_1794321796998.mp3";
+
+  // Ajuste de sincronia em segundos (positivo = texto aparece mais cedo)
+  const AJUSTE = 2;
+
+  // Fração do tempo da linha em que as palavras terminam de aparecer
+  const FATOR_DURACAO = 0.85;
+  // ==========================================================
+
+  const palco = document.getElementById("palco");
+  const btn = document.getElementById("btnIniciar");
+  const carta = document.getElementById("carta");
+  const envelope = document.getElementById("envelope");
+
+  envelope.addEventListener("click", () => {
+    envelope.classList.add("aberto");
+    setTimeout(() => {
+      carta.classList.add("oculta");
+      btn.click(); // começa a letra e o áudio junto com a carta
+    }, 1400);
+  });
+
+  const elementos = LINHAS.map(linha => {
+    const div = document.createElement("div");
+    div.className = "linha";
+    const palavras = linha.texto.split(" ").filter(p => p.length);
+    const spans = palavras.map(p => {
+      const s = document.createElement("span");
+      s.className = "palavra";
+      s.textContent = p;
+      div.appendChild(s);
+      div.appendChild(document.createTextNode(" "));
+      return s;
+    });
+    palco.appendChild(div);
+    return { div, spans };
+  });
+
+  const audio = AUDIO_SRC ? new Audio(AUDIO_SRC) : null;
+  let inicio = 0;
+  let frameId = null;
+  let usandoAudio = false;
+
+  function tempoAtual() {
+    const t = usandoAudio
+      ? audio.currentTime
+      : (performance.now() - inicio) / 1000;
+    return t + AJUSTE;
+  }
+
+  function atualizar() {
+    const t = tempoAtual();
+
+    let ativo = -1;
+    for (let i = 0; i < LINHAS.length; i++) {
+      if (t >= LINHAS[i].tempo) ativo = i;
+    }
+
+    elementos.forEach((item, i) => {
+      if (i === ativo) {
+        item.div.classList.add("ativa");
+        const fim = LINHAS[i + 1] ? LINHAS[i + 1].tempo : LINHAS[i].tempo + 4;
+        const duracao = Math.max((fim - LINHAS[i].tempo) * FATOR_DURACAO, 0.1);
+        const progresso = Math.min((t - LINHAS[i].tempo) / duracao, 1);
+        const quantas = Math.ceil(progresso * item.spans.length);
+        item.spans.forEach((s, j) => s.classList.toggle("vis", j < quantas));
+      } else {
+        item.div.classList.remove("ativa");
+        item.spans.forEach(s => s.classList.remove("vis"));
+      }
+    });
+
+    frameId = requestAnimationFrame(atualizar);
+  }
+
+  function iniciar() {
+    cancelAnimationFrame(frameId);
+    elementos.forEach(item => {
+      item.div.classList.remove("ativa");
+      item.spans.forEach(s => s.classList.remove("vis"));
+    });
+
+    inicio = performance.now();
+    usandoAudio = false;
+
+    if (audio) {
+      audio.currentTime = 0;
+      audio.play()
+        .then(() => { usandoAudio = true; })
+        .catch(() => {
+          // Se o áudio não tocar, a letra continua no relógio, para não travar.
+          usandoAudio = false;
+          inicio = performance.now();
+          alert("Não consegui tocar o áudio. Confira o nome em AUDIO_SRC e se o arquivo está na mesma pasta.");
+        });
+    }
+
+    btn.textContent = "Reiniciar";
+    frameId = requestAnimationFrame(atualizar);
+  }
+
+  // Um único evento: começa e, nos próximos cliques, reinicia sem recarregar
+  btn.addEventListener("click", iniciar);
+
+  const simbolos = ["❤ Eloiza", "💗", "💕 Eloiza", "♥"];
+  const cores = ["#ff4d88", "#ff80ab", "#ffc1d6", "#e0245e", "#ff1744"];
+
+  function criarCoracao() {
+    const c = document.createElement("div");
+    c.className = "coracao";
+    c.textContent = simbolos[Math.floor(Math.random() * simbolos.length)];
+    c.style.left = (Math.random() * 90) + "vw";
+    c.style.top = (Math.random() * 90) + "vh";
+    c.style.fontSize = (16 + Math.random() * 28) + "px";
+    c.style.color = cores[Math.floor(Math.random() * cores.length)];
+    const duracao = 3 + Math.random() * 3;
+    c.style.animationDuration = duracao + "s";
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), duracao * 1000);
+  }
+  setInterval(criarCoracao, 350);
+</script>
+
+</body>
+</html>
