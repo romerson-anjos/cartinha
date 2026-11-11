@@ -2,343 +2,567 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Letra animada 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Amor 💖</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: radial-gradient(circle at 50% 30%, #3b0a14, #12020a 70%);
-    overflow: hidden;
-    font-family: 'Georgia', serif;
-    color: #ffc2d9;
-  }
-
-  #palco {
-    position: relative;
-    z-index: 2;
-    width: min(92vw, 720px);
-    min-height: 220px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 20px;
-  }
-
-  .linha {
-    display: none;
-    font-size: clamp(26px, 5vw, 46px);
-    line-height: 1.4;
-    text-shadow: 0 0 12px rgba(255, 60, 110, .8), 0 0 30px rgba(255, 30, 90, .5);
-  }
-  .linha.ativa { display: block; }
-
-  .palavra {
-    display: inline-block;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity .35s ease, transform .35s ease;
-    margin: 0 .12em;
-  }
-  .palavra.vis {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  #controles {
-    position: relative;
-    z-index: 2;
-    margin-top: 30px;
-  }
-  #controles button {
-    padding: 10px 26px;
-    font-size: 16px;
-    border: none;
-    border-radius: 30px;
-    background: #c1121f;
-    color: #fff;
-    cursor: pointer;
-    box-shadow: 0 0 16px rgba(230, 57, 70, .6);
-  }
-  #controles button:hover { background: #e63946; }
-
-  .coracao {
-    position: fixed;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0;
-    animation: flutuar linear forwards;
-  }
-  @keyframes flutuar {
-    0%   { opacity: 0; transform: translateY(0) scale(.5) rotate(-10deg); }
-    25%  { opacity: .9; }
-    70%  { opacity: .7; }
-    100% { opacity: 0; transform: translateY(-80px) scale(1.15) rotate(10deg); }
-  }
-
-  /* ===== Tela de carta ===== */
-  #carta {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-    background: radial-gradient(circle at 50% 30%, #3b0a14, #12020a 70%);
-    transition: opacity .8s ease, visibility .8s;
-  }
-  #carta.oculta { opacity: 0; visibility: hidden; }
-
-  .envelope {
-    position: relative;
-    width: min(80vw, 340px);
-    height: 220px;
-    cursor: pointer;
-    animation: flutuarEnvelope 3s ease-in-out infinite;
-  }
-  @keyframes flutuarEnvelope {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-10px); }
-  }
-
-  .envelope .corpo {
-    position: absolute;
-    inset: 0;
-    background: #fff0f5;
-    border-radius: 14px;
-    box-shadow: 0 0 24px rgba(255, 60, 110, .5);
-    overflow: hidden;
-  }
-  .envelope .aba {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 28%;
-    background: #ffc2d9;
-    clip-path: polygon(0 0, 100% 0, 50% 100%);
-    transform-origin: top center;
-    transition: transform .8s ease;
-    z-index: 2;
-  }
-  .envelope .selo {
-    position: absolute;
-    left: 50%; bottom: 14px;
-    transform: translateX(-50%);
-    font-size: 34px;
-    z-index: 4;
-    transition: opacity .4s;
-  }
-  .envelope.aberto .aba { transform: rotateX(180deg); }
-  .envelope.aberto .selo { opacity: 0; }
-
-  .envelope .carta-papel {
-    position: absolute;
-    left: 10px; right: 10px; top: 30px;
-    height: 160px;
-    background: #fff;
-    border-radius: 8px;
-    padding: 14px 16px;
-    font-family: 'Georgia', serif;
-    color: #7a0f2e;
-    text-align: center;
-    transform: translateY(0);
-    transition: transform 1s ease .3s;
-    z-index: 3;
-  }
-  .envelope.aberto .carta-papel { transform: translateY(-120px); }
-  .carta-papel h2 { font-size: 22px; margin-bottom: 8px; }
-  .carta-papel p { font-size: 15px; line-height: 1.5; }
-
-  #carta .dica {
-    position: absolute;
-    bottom: 40px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #ffc2d9;
-    font-family: 'Georgia', serif;
-    font-style: italic;
-    font-size: 15px;
-    opacity: .85;
-  }
+:root{--pink:#ff75b3;--cream:#fff0f7}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#08030a;color:var(--cream);font-family:Georgia,"Times New Roman",serif}
+#galaxia{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 55%,#451124 0,#200a17 36%,#0c0610 72%,#050308 100%);touch-action:none}
+#ceu{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+#dica{position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:4;width:max-content;max-width:94vw;text-align:center;color:#ffd4e3b8;font:11px Arial,sans-serif;letter-spacing:.13em;text-transform:uppercase;pointer-events:none}
+#versiculos{position:absolute;inset:0;z-index:5;pointer-events:none}
+.versiculo{position:absolute;left:0;top:0;transform:translate(-50%,-50%);pointer-events:auto;border:1px solid #ffabc777;border-radius:999px;padding:9px 14px;background:linear-gradient(135deg,#711b3be8,#200714f2);box-shadow:0 0 18px #ff3c8840,inset 0 0 12px #ff75b022;color:#ffe5ef;white-space:nowrap;cursor:pointer;font:14px Georgia,serif;transition:scale .25s,border-color .25s;z-index:1}
+.versiculo:hover,.versiculo:focus-visible{scale:1.1;border-color:#ffd4e5;box-shadow:0 0 25px #ff59a9aa;outline:none}
+#reiniciar{position:absolute;z-index:7;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);border:1px solid #ffabc788;border-radius:999px;padding:11px 25px;background:linear-gradient(135deg,#b5225e,#70123e);box-shadow:0 0 20px #ff4c9266;color:#fff;cursor:pointer;font:15px Georgia,serif;transition:filter .2s}
+#reiniciar:hover{filter:brightness(1.15)}
+#modal,#carta{position:fixed;inset:0;display:grid;place-items:center;padding:22px;background:#09030adb;backdrop-filter:blur(10px);transition:opacity .6s,visibility .6s}
+#modal{z-index:12}
+#carta{z-index:15;background:radial-gradient(ellipse at 50% 35%,#421326ee,#08030af7 74%);perspective:1200px}
+.escondido{opacity:0;visibility:hidden;pointer-events:none}
+#cartaoVersiculo{width:min(90vw,470px);padding:38px 30px;border:1px solid #ffb8d477;border-radius:26px;text-align:center;background:linear-gradient(145deg,#54172cef,#1b0815f2);box-shadow:0 20px 80px #000a,0 0 45px #fa428833;animation:entrada .45s ease-out}
+@keyframes entrada{from{transform:rotateY(-12deg) translateY(12px);opacity:0}to{transform:none;opacity:1}}
+#referencia{margin:0 0 16px;color:#ffc4dc;font:11px Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase}
+#textoVersiculo{margin:0;color:#fff0f7;font-size:clamp(23px,4vw,34px);line-height:1.45;text-shadow:0 0 18px #ff70ad55}
+.botaoFechar{margin-top:24px;border:1px solid #ffabc766;border-radius:999px;padding:10px 18px;background:#51132f;color:#ffe8f1;cursor:pointer}
+#folha{position:relative;width:min(86vw,390px);height:min(500px,72vh);transform-style:preserve-3d;transition:transform .15s ease-out;filter:drop-shadow(0 28px 40px #0009)}
+#dentroCarta{position:absolute;inset:0;border-radius:8px 8px 18px 18px;background:linear-gradient(145deg,#fff3f7,#e9bfcf);box-shadow:inset 0 0 0 10px #ffffff70,inset 0 0 0 11px #bc66825c;display:flex;align-items:center;justify-content:center;color:#6d1738;text-align:center;padding:30px}
+#dentroCarta h1{font-size:clamp(32px,6vw,48px);font-weight:normal;margin:0 0 14px}
+#dentroCarta p{font-size:16px;font-style:italic;line-height:1.7;margin:0}
+#capaCarta{position:absolute;inset:0;z-index:2;transform-origin:left center;transform-style:preserve-3d;transition:transform 1.3s cubic-bezier(.2,.75,.2,1);border-radius:8px 8px 18px 18px;background:linear-gradient(135deg,#7f193c,#4e0e2b 70%,#30071c);border:1px solid #ffb6d388;display:grid;place-items:center;backface-visibility:hidden}
+#capaCarta:before{content:"";position:absolute;inset:14px;border:1px solid #f6b0cd66;border-radius:5px 5px 14px 14px}
+#capaTitulo{text-align:center;padding:25px;color:#ffe6ef}
+#capaTitulo span{display:block;font-size:58px;color:#ff85b9;text-shadow:0 0 25px #ff2781;animation:pulsar 1.5s ease-in-out infinite}
+#capaTitulo strong{display:block;margin-top:12px;font-size:29px;font-weight:normal;line-height:1.35}
+#capaTitulo small{display:block;margin-top:15px;color:#ffc5dc;font:11px Arial,sans-serif;letter-spacing:.22em}
+@keyframes pulsar{50%{transform:scale(1.14)}}
+#abrir{position:absolute;left:50%;bottom:20px;z-index:4;transform:translateX(-50%);white-space:nowrap;border:1px solid #ff9ac5;border-radius:999px;padding:11px 19px;background:linear-gradient(135deg,#b5225e,#70123e);box-shadow:0 0 18px #ff4c9266;color:#fff;cursor:pointer;font:15px Georgia,serif}
+#carta.aberta #capaCarta{transform:rotateY(-165deg)}
+#carta.aberta #abrir{opacity:0;pointer-events:none}
+@media(max-width:600px){#dica{font-size:9px;letter-spacing:.06em}.versiculo{padding:7px 9px;font-size:11px}#reiniciar{font-size:13px;padding:9px 18px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
+<main id="galaxia">
+  <canvas id="ceu"></canvas>
+  <div id="dica">Arraste para girar · use a roda ou pinça para aproximar</div>
+  <div id="versiculos"></div>
+  <button id="reiniciar" type="button">↺ Reiniciar</button>
+</main>
 
-<div id="carta">
-  <div class="envelope" id="envelope">
-    <div class="corpo"></div>
-    <div class="carta-papel">
-      <h2>muita aura fy</h2>
-      <p>Curte a vibe.<br>💌</p>
+<section id="modal" class="escondido" role="dialog" aria-modal="true" aria-labelledby="referencia">
+  <article id="cartaoVersiculo">
+    <h2 id="referencia"></h2>
+    <p id="textoVersiculo"></p>
+    <button class="botaoFechar" id="fechar" type="button">Fechar</button>
+  </article>
+</section>
+
+<section id="carta" aria-label="Carta para meu amor">
+  <div id="folha">
+    <div id="dentroCarta">
+      <div>
+        <h1>curte a vibe,<br>💕</h1>
+        <p>Em cada estrela, uma lembrança.<br>Em cada palavra, um pedacinho do meu coração.</p>
+      </div>
     </div>
-    <div class="aba"></div>
-    <div class="selo">💖</div>
+    <div id="capaCarta">
+      <div id="capaTitulo">
+        <span>♥</span>
+        <strong>abre aí 😉<br>💕</strong>
+        <small>UMA CARTA FEITA DE ESTRELAS</small>
+      </div>
+    </div>
   </div>
-  <div class="dica">toque no envelope para abrir</div>
-</div>
+  <button id="abrir" type="button">Abrir minha carta ✨</button>
+</section>
 
-<div id="palco"></div>
-
-<div id="controles">
-  <button id="btnIniciar">▶ Começar</button>
-</div>
+<audio id="musica" preload="auto" src="musical.mp3"></audio>
 
 <script>
-  // ==========================================================
-  //  👇 EDITE AQUI 👇
-  //  tempo: segundo (número) em que a linha começa
-  //  texto: o que aparece na tela
-  //  Os tempos precisam estar em ordem crescente.
-  // ==========================================================
-  const LINHAS = [
-    { tempo: 3.5,    texto: "O quarto meio escuro, a janela aberta" },
-    { tempo: 5.5,    texto: "A porta encostada, a Lua está tão bela" },
-    { tempo: 9.5,    texto: "E eu tô aqui sentindo falta de você" },
-    { tempo: 13.5,   texto: "Já vi todos os filmes, li todos os livros" },
-    { tempo: 16.5,   texto: "E tô esperando a próxima novela" },
-    { tempo: 19.5,   texto: "Tudo porque eu tô tentando te esquecer" },
-    { tempo: 25.5,   texto: "E em qualquer lugar que eu vou" },
-    { tempo: 27.5,   texto: "Onde você está, eu estou, oh ohoh oh ohoh" },
-    { tempo: 34.5,   texto: "O meu pensamento te segue" },
-    { tempo: 36.5,   texto: "Minha saudade te persegue" },
-    { tempo: 39.5,   texto: "O meu amor não envelhece" },
-    { tempo: 41.5,   texto: "Cê não sai da minha mente" },
-    { tempo: 44.5,   texto: "É que você me causa febre" },
-    { tempo: 47.5,   texto: "De uns 40 graus ou um pouco mais" },
-    { tempo: 49.5,   texto: "Eu quero é você, eu amo só você" },
-    { tempo: 54.5,   texto: "E o resto tanto faz, tanto faz" },
-    
-    
-  ];
+const PALAVRA_CORACAO = "Aline";
 
+const VERSICULOS = [
+  {nome:"💘", referencia:"Eclesiastes 4:9", texto:"Melhor é serem dois do que um."},
+  {nome:"❤️", referencia:"1 Coríntios 13:7", texto:"Tudo sofre, tudo crê, tudo espera, tudo suporta."},
+  {nome:"sem comentários", referencia:"Cantares 8:7", texto:"As muitas águas não poderiam apagar este amor."},
+  {nome:"Que cara romântico", referencia:"Colossenses 3:14", texto:"Acima de tudo, porém, revistam-se do amor."},
+  {nome:"Jesus né", referencia:"1 João 4:19", texto:"Nós amamos porque ele nos amou primeiro."},
+  {nome:"💞", referencia:"Provérbios 17:17", texto:"Em todo o tempo ama o amigo."}
+];
 
-  const AUDIO_SRC = "ssstik.io_1794321796998.mp3";
+const LETRA = [
+  {tempo:3.5,texto:"A gente não precisa tar colado pra tar junto"},
+  {tempo:5.5,texto:"Os nossos corpos se conversam por horas e horas"},
+  {tempo:9.5,texto:"Sem palavras tão dizendo a todo instante um pro outro"},
+  {tempo:13.5,texto:"O quanto se adoram"},
+  {tempo:16.5,texto:"Eu não preciso te olhar"},
+  {tempo:17.5,texto:"Pra te ter em meu mundo"},
+  {tempo:20.5,texto:"Porque aonde quer que eu vá"},
+  {tempo:22.5,texto:"Você está em tudo"},
+  {tempo:24.5,texto:"Tudo, tudo que eu preciso, oh"},
+  {tempo:32.5,texto:"A gente não precisa tar colado pra tar junto"},
+  {tempo:34.5,texto:"Os nossos corpos se conversam por horas e horas"},
+  {tempo:38.5,texto:"Sem palavras tão dizendo a todo instante um pro outro"},
+  {tempo:42.5,texto:"O quanto se adoram"},
+  {tempo:45.5,texto:"Eu não preciso te olhar"},
+  {tempo:46.5,texto:"Pra te ter em meu mundo"},
+  {tempo:49.5,texto:"Porque aonde quer que eu vá"},
+  {tempo:51.5,texto:"Você está em tudo"},
+  {tempo:53.5,texto:"Tudo, tudo que eu preciso, oh"},
+  {tempo:57.5,texto:"Te vivoooo"}
+];
 
-  // Ajuste de sincronia em segundos (positivo = texto aparece mais cedo)
-  const AJUSTE = 2;
+const AJUSTE = 0;
+const audio = document.getElementById("musica");
+const canvas = document.getElementById("ceu");
+const ctx = canvas.getContext("2d");
+const modal = document.getElementById("modal");
+const carta = document.getElementById("carta");
+const versiculosBox = document.getElementById("versiculos");
 
-  // Fração do tempo da linha em que as palavras terminam de aparecer
-  const FATOR_DURACAO = 0.85;
-  // ==========================================================
+let w = innerWidth;
+let h = innerHeight;
+let yaw = -0.12;
+let pitch = 0.52;
+let zoom = 1;
+let drag = null;
+let iniciado = false;
+let audioSincronizado = false;
+let relogio = 0;
+let inicioRelogio = 0;
 
-  const palco = document.getElementById("palco");
-  const btn = document.getElementById("btnIniciar");
-  const carta = document.getElementById("carta");
-  const envelope = document.getElementById("envelope");
+const posicoesSuaves = new WeakMap();
+let ultimoFrameVersiculos = 0;
 
-  envelope.addEventListener("click", () => {
-    envelope.classList.add("aberto");
-    setTimeout(() => {
-      carta.classList.add("oculta");
-      btn.click(); // começa a letra e o áudio junto com a carta
-    }, 1400);
-  });
+const camera = 1900;
 
-  const elementos = LINHAS.map(linha => {
-    const div = document.createElement("div");
-    div.className = "linha";
-    const palavras = linha.texto.split(" ").filter(p => p.length);
-    const spans = palavras.map(p => {
-      const s = document.createElement("span");
-      s.className = "palavra";
-      s.textContent = p;
-      div.appendChild(s);
-      div.appendChild(document.createTextNode(" "));
-      return s;
+const estrelas = Array.from({length:1500}, () => ({
+  x: (Math.random() - .5) * 3600,
+  y: (Math.random() - .5) * 2100,
+  z: (Math.random() - .5) * 2400,
+  r: .35 + Math.random() * 1.35,
+  a: .2 + Math.random() * .72,
+  f: Math.random() * 6
+}));
+
+const poeira = Array.from({length:3600}, () => {
+  const a = Math.random() * Math.PI * 2;
+  const r = Math.sqrt(Math.random()) * 1350;
+
+  return {
+    x: Math.cos(a) * r,
+    y: 195 + (Math.random() - .5) * 30,
+    z: Math.sin(a) * r,
+    sz: .55 + Math.random() * 1.3,
+    f: Math.random() * 6
+  };
+});
+
+function pontoCoracao(a) {
+  return {
+    x: 16 * Math.pow(Math.sin(a), 3) / 18,
+    y: -(13 * Math.cos(a) - 5 * Math.cos(2*a) - 2 * Math.cos(3*a) - Math.cos(4*a)) / 18
+  };
+}
+
+const palavras = [];
+
+for (const camada of [
+  {qtd:32, raio:.97},
+  {qtd:20, raio:.68},
+  {qtd:12, raio:.36}
+]) {
+  for (let i = 0; i < camada.qtd; i++) {
+    const a = (i / camada.qtd) * Math.PI * 2 + (Math.random() - .5) * .025;
+    const p = pontoCoracao(a);
+
+    palavras.push({
+      x: p.x * camada.raio,
+      y: p.y * camada.raio,
+      f: Math.random() * 6.28,
+      z: (Math.random() - .5) * 10
     });
-    palco.appendChild(div);
-    return { div, spans };
+  }
+}
+
+const locaisVersiculos = [
+  [-620,-120,60],
+  [600,-210,-30],
+  [760,190,75],
+  [-700,250,-50],
+  [-230,470,30],
+  [190,-440,50]
+];
+
+function criarVersiculos() {
+  versiculosBox.innerHTML = "";
+
+  VERSICULOS.forEach(v => {
+    const botao = document.createElement("button");
+    botao.type = "button";
+    botao.className = "versiculo";
+    botao.textContent = "✦ " + v.nome;
+    botao.setAttribute("aria-label", "Abrir versículo: " + v.nome);
+
+    botao.addEventListener("click", () => {
+      document.getElementById("referencia").textContent = v.referencia;
+      document.getElementById("textoVersiculo").textContent = "“" + v.texto + "”";
+      modal.classList.remove("escondido");
+    });
+
+    versiculosBox.appendChild(botao);
   });
+}
 
-  const audio = AUDIO_SRC ? new Audio(AUDIO_SRC) : null;
-  let inicio = 0;
-  let frameId = null;
-  let usandoAudio = false;
+function projetar(x, y, z) {
+  const cy = Math.cos(yaw);
+  const sy = Math.sin(yaw);
+  const cp = Math.cos(pitch);
+  const sp = Math.sin(pitch);
 
-  function tempoAtual() {
-    const t = usandoAudio
-      ? audio.currentTime
-      : (performance.now() - inicio) / 1000;
-    return t + AJUSTE;
+  const xr = x * cy + z * sy;
+  const zr = -x * sy + z * cy;
+  const yr = y * cp - zr * sp;
+  const zp = y * sp + zr * cp;
+  const dist = camera - zp;
+
+  if (dist < 120) return null;
+
+  const focal = Math.min(w, h) * 1.2 * zoom;
+  const s = focal / dist;
+
+  return {
+    x: w / 2 + xr * s,
+    y: h / 2 + yr * s,
+    s,
+    z: zp
+  };
+}
+
+function redimensionar() {
+  w = innerWidth;
+  h = innerHeight;
+
+  const d = Math.min(devicePixelRatio || 1, 2);
+  canvas.width = w * d;
+  canvas.height = h * d;
+  canvas.style.width = w + "px";
+  canvas.style.height = h + "px";
+  ctx.setTransform(d, 0, 0, d, 0, 0);
+}
+
+function tempoAtual() {
+  if (audioSincronizado && !audio.paused) return audio.currentTime;
+
+  return relogio +
+    (iniciado ? (performance.now() - inicioRelogio) / 1000 : 0);
+}
+
+function desenhar(ms) {
+  const t = ms / 1000;
+  const delta = ultimoFrameVersiculos
+    ? Math.min((ms - ultimoFrameVersiculos) / 1000, 0.05)
+    : 1;
+
+  ultimoFrameVersiculos = ms;
+  const suavidade = 1 - Math.exp(-delta * 5);
+  ctx.clearRect(0, 0, w, h);
+
+  for (const s of estrelas) {
+    const p = projetar(s.x, s.y, s.z);
+
+    if (!p || p.x < 0 || p.x > w || p.y < 0 || p.y > h) continue;
+
+    ctx.globalAlpha = s.a * (.78 + .22 * Math.sin(t * .35 + s.f));
+    ctx.fillStyle = "#ffe5f0";
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, Math.max(.35, s.r * p.s * .8), 0, 6.283);
+    ctx.fill();
   }
 
-  function atualizar() {
-    const t = tempoAtual();
+  ctx.globalAlpha = 1;
 
-    let ativo = -1;
-    for (let i = 0; i < LINHAS.length; i++) {
-      if (t >= LINHAS[i].tempo) ativo = i;
+  for (let i = 0; i < poeira.length; i++) {
+    const q = poeira[i];
+    const a = t * .018;
+    const r = Math.cos(a) * q.x + Math.sin(a) * q.z;
+    const z = -Math.sin(a) * q.x + Math.cos(a) * q.z;
+    const p = projetar(r, q.y, z);
+
+    if (!p || p.x < -3 || p.x > w + 3 || p.y < -3 || p.y > h + 3) continue;
+
+    ctx.globalAlpha =
+      (.32 + .48 * (.5 + .5 * Math.sin(t * .4 + q.f))) * Math.min(1, p.s);
+
+    ctx.fillStyle = i % 7 === 0 ? "#ff8abb" : "#ffdbea";
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, Math.max(.45, q.sz * p.s * .8), 0, 6.283);
+    ctx.fill();
+  }
+
+  ctx.globalAlpha = 1;
+
+  const centro = projetar(0, 195, 0);
+  const cx = centro ? centro.x : w / 2;
+  const cy = centro ? centro.y : h * .66;
+
+  let linha = "Te vivooo";
+  const segundo = tempoAtual() + AJUSTE;
+
+  for (let i = 0; i < LETRA.length; i++) {
+    if (segundo >= LETRA[i].tempo) linha = LETRA[i].texto;
+  }
+
+  const posLetra = projetar(0, -600, -12);
+
+  if (posLetra) {
+    ctx.save();
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font =
+      "bold " + Math.max(44, Math.min(68, w * .057) * posLetra.s) + "px Cinzel";
+    ctx.shadowColor = "#ff3489";
+    ctx.shadowBlur = 24;
+    ctx.fillStyle = "rgba(255,215,232,.3)";
+    ctx.fillText(linha, posLetra.x, posLetra.y, Math.min(w * .9, 1100));
+    ctx.restore();
+  }
+
+  const largura = 700;
+  const altura = 640;
+  const pulsacao = 1 + .008 * Math.sin(t * .32);
+  const centroY = -205;
+
+  ctx.save();
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.shadowColor = "#ff3b96";
+  ctx.shadowBlur = 13;
+
+  for (let i = 0; i < palavras.length; i++) {
+    const q = palavras[i];
+    const p = projetar(
+      q.x * largura * .5 * pulsacao,
+      centroY + q.y * altura * .5 * pulsacao,
+      q.z
+    );
+
+    if (!p) continue;
+
+    ctx.globalAlpha = .76 + .12 * Math.sin(t * .28 + q.f);
+    ctx.fillStyle = i % 9 === 0 ? "#fff0d0" : "#ffd2e5";
+    ctx.font = "bold " + Math.max(8, Math.min(15, 13 * p.s)) + "px Georgia";
+    ctx.fillText(
+      PALAVRA_CORACAO,
+      p.x + Math.sin(t * .1 + q.f) * .35,
+      p.y + Math.cos(t * .1 + q.f) * .35
+    );
+  }
+
+  ctx.restore();
+  ctx.globalAlpha = 1;
+
+  if (centro) {
+    const raio = Math.min(w * .48, 650) * centro.s;
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.scale(1, .27);
+
+    const brilho = ctx.createRadialGradient(0, 0, 2, 0, 0, raio);
+    brilho.addColorStop(0, "#fff5d8");
+    brilho.addColorStop(.08, "#ffd363");
+    brilho.addColorStop(.18, "#ff5eaa");
+    brilho.addColorStop(1, "rgba(255,36,139,0)");
+
+    ctx.fillStyle = brilho;
+    ctx.beginPath();
+    ctx.arc(0, 0, raio, 0, 6.283);
+    ctx.fill();
+
+    ctx.fillStyle = "#050208";
+    ctx.beginPath();
+    ctx.ellipse(0, 0, Math.max(7, 18 * centro.s), Math.max(4, 9 * centro.s), 0, 0, 6.283);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  const tempo = ms / 1000;
+
+  [...versiculosBox.children].forEach((b, i) => {
+    const base = locaisVersiculos[i % locaisVersiculos.length];
+    const fase = i * 2.1;
+
+    const x = base[0] + Math.sin(tempo * .08 + fase) * 24;
+    const y = base[1] + Math.cos(tempo * .06 + fase) * 18;
+    const z = base[2];
+
+    const p = projetar(x, y, z);
+
+    if (!p) {
+      b.style.display = "none";
+      return;
     }
 
-    elementos.forEach((item, i) => {
-      if (i === ativo) {
-        item.div.classList.add("ativa");
-        const fim = LINHAS[i + 1] ? LINHAS[i + 1].tempo : LINHAS[i].tempo + 4;
-        const duracao = Math.max((fim - LINHAS[i].tempo) * FATOR_DURACAO, 0.1);
-        const progresso = Math.min((t - LINHAS[i].tempo) / duracao, 1);
-        const quantas = Math.ceil(progresso * item.spans.length);
-        item.spans.forEach((s, j) => s.classList.toggle("vis", j < quantas));
-      } else {
-        item.div.classList.remove("ativa");
-        item.spans.forEach(s => s.classList.remove("vis"));
-      }
-    });
+    b.style.display = "block";
 
-    frameId = requestAnimationFrame(atualizar);
+    const atual = posicoesSuaves.get(b) || {x:p.x, y:p.y};
+    atual.x += (p.x - atual.x) * suavidade;
+    atual.y += (p.y - atual.y) * suavidade;
+    posicoesSuaves.set(b, atual);
+
+    b.style.left = atual.x + "px";
+    b.style.top = atual.y + "px";
+    b.style.transform =
+      "translate(-50%,-50%) perspective(700px) rotateY(" +
+      yaw + "rad) rotateX(" + pitch + "rad) scale(1)";
+
+    b.style.zIndex = String(Math.round(10 + p.z / 100));
+  });
+
+  requestAnimationFrame(desenhar);
+}
+
+function iniciarMusica() {
+  iniciado = true;
+  relogio = 0;
+  inicioRelogio = performance.now();
+  audioSincronizado = false;
+
+  try {
+    audio.currentTime = 0;
+    const tocando = audio.play();
+
+    if (tocando) {
+      tocando.then(() => {
+        audioSincronizado = true;
+      }).catch(() => {
+        audioSincronizado = false;
+      });
+    }
+  } catch (erro) {
+    audioSincronizado = false;
+  }
+}
+
+document.getElementById("abrir").addEventListener("click", () => {
+  if (iniciado) return;
+
+  carta.classList.add("aberta");
+  iniciarMusica();
+
+  setTimeout(() => {
+    carta.classList.add("escondido");
+  }, 1250);
+});
+
+document.getElementById("reiniciar").addEventListener("click", iniciarMusica);
+
+document.getElementById("fechar").addEventListener("click", () => {
+  modal.classList.add("escondido");
+});
+
+modal.addEventListener("click", event => {
+  if (event.target === modal) modal.classList.add("escondido");
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") modal.classList.add("escondido");
+});
+
+const pointers = new Map();
+let pinchBase = 0;
+
+canvas.addEventListener("pointerdown", event => {
+  canvas.setPointerCapture(event.pointerId);
+  pointers.set(event.pointerId, {x:event.clientX, y:event.clientY});
+
+  if (pointers.size === 1) {
+    drag = {x:event.clientX, y:event.clientY};
   }
 
-  function iniciar() {
-    cancelAnimationFrame(frameId);
-    elementos.forEach(item => {
-      item.div.classList.remove("ativa");
-      item.spans.forEach(s => s.classList.remove("vis"));
-    });
+  if (pointers.size === 2) {
+    const pontos = [...pointers.values()];
+    pinchBase = Math.hypot(
+      pontos[0].x - pontos[1].x,
+      pontos[0].y - pontos[1].y
+    );
+    drag = null;
+  }
+});
 
-    inicio = performance.now();
-    usandoAudio = false;
+canvas.addEventListener("pointermove", event => {
+  if (!pointers.has(event.pointerId)) return;
 
-    if (audio) {
-      audio.currentTime = 0;
-      audio.play()
-        .then(() => { usandoAudio = true; })
-        .catch(() => {
-          // Se o áudio não tocar, a letra continua no relógio, para não travar.
-          usandoAudio = false;
-          inicio = performance.now();
-          alert("Não consegui tocar o áudio. Confira o nome em AUDIO_SRC e se o arquivo está na mesma pasta.");
-        });
+  pointers.set(event.pointerId, {x:event.clientX, y:event.clientY});
+
+  if (pointers.size >= 2) {
+    const pontos = [...pointers.values()];
+    const distancia = Math.hypot(
+      pontos[0].x - pontos[1].x,
+      pontos[0].y - pontos[1].y
+    );
+
+    if (pinchBase) {
+      zoom = Math.max(.65, Math.min(1.9, zoom * distancia / pinchBase));
     }
 
-    btn.textContent = "Reiniciar";
-    frameId = requestAnimationFrame(atualizar);
+    pinchBase = distancia;
+    return;
   }
 
-  // Um único evento: começa e, nos próximos cliques, reinicia sem recarregar
-  btn.addEventListener("click", iniciar);
-
-  const simbolos = ["❤", "💗", "💕", "♥"];
-  const cores = ["#ff4d88", "#ff80ab", "#ffc1d6", "#e0245e", "#ff1744"];
-
-  function criarCoracao() {
-    const c = document.createElement("div");
-    c.className = "coracao";
-    c.textContent = simbolos[Math.floor(Math.random() * simbolos.length)];
-    c.style.left = (Math.random() * 90) + "vw";
-    c.style.top = (Math.random() * 90) + "vh";
-    c.style.fontSize = (16 + Math.random() * 28) + "px";
-    c.style.color = cores[Math.floor(Math.random() * cores.length)];
-    const duracao = 3 + Math.random() * 3;
-    c.style.animationDuration = duracao + "s";
-    document.body.appendChild(c);
-    setTimeout(() => c.remove(), duracao * 1000);
+  if (drag) {
+    yaw += (event.clientX - drag.x) * .004;
+    pitch = Math.max(
+      -.15,
+      Math.min(1.05, pitch + (event.clientY - drag.y) * .004)
+    );
+    drag = {x:event.clientX, y:event.clientY};
   }
-  setInterval(criarCoracao, 350);
+});
+
+function soltarPonteiro(event) {
+  pointers.delete(event.pointerId);
+  if (pointers.size < 2) pinchBase = 0;
+  if (pointers.size === 0) drag = null;
+}
+
+canvas.addEventListener("pointerup", soltarPonteiro);
+canvas.addEventListener("pointercancel", soltarPonteiro);
+
+document.getElementById("galaxia").addEventListener("wheel", event => {
+  event.preventDefault();
+  zoom = Math.max(.65, Math.min(1.9, zoom * Math.exp(-event.deltaY * .001)));
+}, {passive:false});
+
+const folha = document.getElementById("folha");
+
+carta.addEventListener("pointermove", event => {
+  const r = folha.getBoundingClientRect();
+  const x = (event.clientX - r.left) / r.width - .5;
+  const y = (event.clientY - r.top) / r.height - .5;
+
+  folha.style.transform =
+    "rotateY(" + (x * 10) + "deg) rotateX(" + (-y * 8) + "deg)";
+});
+
+carta.addEventListener("pointerleave", () => {
+  folha.style.transform = "rotateY(0) rotateX(0)";
+});
+
+window.addEventListener("resize", redimensionar);
+
+audio.addEventListener("ended", () => {
+  audioSincronizado = false;
+  relogio = audio.currentTime;
+  inicioRelogio = performance.now();
+});
+
+redimensionar();
+criarVersiculos();
+requestAnimationFrame(desenhar);
 </script>
-
 </body>
 </html>
