@@ -197,14 +197,16 @@
 
   .anel {
     position: absolute;
+    z-index: 1;
     left: 50%;
-    bottom: 48px;
-    width: 49px;
-    height: 49px;
+    bottom: 52px;
+    width: 68px;
+    height: 68px;
+    border-width: 9px;
     border: 7px solid #f5d77d;
     border-bottom-color: #b88625;
     border-radius: 50%;
-    transform: translateX(-50%) rotate(-12deg);
+    transform: translateX(-50%);
     opacity: 0;
     filter: drop-shadow(0 0 8px #ffd96b);
     transition: opacity .6s .25s, transform .8s .2s;
@@ -280,18 +282,18 @@
   .anel-caixa.aberta .lacinho { opacity: 0; }
   .anel-caixa.aberta .anel {
     opacity: 1;
-    transform: translateX(-50%) rotate(0) translateY(-3px);
+    transform: translateX(-50%);
   }
 
   .pergunta {
     position: absolute;
-    width: 280px;
+    width: 340px;
     left: 50%;
     top: -72px;
     transform: translateX(-50%) translateY(8px);
     text-align: center;
     color: #ffe6bc;
-    font-size: 18px;
+    font-size: 23px;
     line-height: 1.35;
     opacity: 0;
     transition: opacity .6s .4s, transform .6s .4s;
