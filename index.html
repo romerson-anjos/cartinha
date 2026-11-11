@@ -13,12 +13,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 28px 16px;
     background: radial-gradient(circle at 50% 30%, #3b0a14, #12020a 70%);
-    overflow-x: hidden;
-    overflow-y: auto;
-    font-family: Georgia, serif;
+    overflow: hidden;
+    font-family: 'Georgia', serif;
     color: #ffc2d9;
   }
 
@@ -54,68 +51,22 @@
     transform: translateY(0);
   }
 
-  #pedido-area {
-    position: relative;
-    z-index: 2;
-    width: min(92vw, 460px);
-    min-height: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: -8px;
-  }
-  #pedido-area .anel-caixa {
-    visibility: hidden;
-    pointer-events: none;
-  }
-  #pedido-area .anel-caixa.mini {
-    visibility: visible;
-    pointer-events: auto;
-  }
-
-  #botoes-resposta {
-    display: flex;
-    justify-content: center;
-    gap: 14px;
-    margin-bottom: 12px;
-  }
-  #botoes-resposta button,
-  #controles button {
-    padding: 10px 26px;
-    font-size: 16px;
-    border: 0;
-    border-radius: 30px;
-    color: #fff;
-    cursor: pointer;
-    background: linear-gradient(135deg, #c1121f, #8f1024);
-    box-shadow: 0 0 16px rgba(230, 57, 70, .45);
-    transition: transform .2s, box-shadow .2s;
-  }
-  #botoes-resposta button:hover,
-  #controles button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0 20px rgba(255, 100, 140, .7);
-  }
-  #botoes-resposta button:first-child {
-    background: linear-gradient(135deg, #d4af37, #9b7115);
-  }
-  #botoes-resposta button:last-child {
-    background: linear-gradient(135deg, #76243a, #4c1425);
-  }
-
   #controles {
     position: relative;
     z-index: 2;
-    margin-top: 2px;
-    text-align: center;
+    margin-top: 30px;
   }
-  #resposta {
-    min-height: 24px;
-    margin-top: 10px;
-    font-size: 15px;
-    color: #ffe2ad;
-    text-shadow: 0 0 10px #c1121f;
+  #controles button {
+    padding: 10px 26px;
+    font-size: 16px;
+    border: none;
+    border-radius: 30px;
+    background: #c1121f;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 0 16px rgba(230, 57, 70, .6);
   }
+  #controles button:hover { background: #e63946; }
 
   .coracao {
     position: fixed;
@@ -125,233 +76,116 @@
     animation: flutuar linear forwards;
   }
   @keyframes flutuar {
-    0% { opacity: 0; transform: translateY(0) scale(.5) rotate(-10deg); }
-    25% { opacity: .9; }
-    70% { opacity: .7; }
+    0%   { opacity: 0; transform: translateY(0) scale(.5) rotate(-10deg); }
+    25%  { opacity: .9; }
+    70%  { opacity: .7; }
     100% { opacity: 0; transform: translateY(-80px) scale(1.15) rotate(10deg); }
   }
 
-  /* Caixa de alianças */
+  /* ===== Tela de carta ===== */
   #carta {
     position: fixed;
     inset: 0;
-    z-index: 10;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 10;
     background: radial-gradient(circle at 50% 30%, #3b0a14, #12020a 70%);
-    transition: opacity .8s, visibility .8s;
+    transition: opacity .8s ease, visibility .8s;
   }
-  #carta.oculta {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
+  #carta.oculta { opacity: 0; visibility: hidden; }
 
-  .anel-caixa {
-    --escala: 1;
+  .envelope {
     position: relative;
-    width: 220px;
-    height: 195px;
-    transform: scale(var(--escala));
-    transform-origin: center;
+    width: min(80vw, 340px);
+    height: 220px;
     cursor: pointer;
     animation: flutuarEnvelope 3s ease-in-out infinite;
-    transition: transform 1s cubic-bezier(.2, .8, .2, 1);
-    filter: drop-shadow(0 16px 22px rgba(0, 0, 0, .45));
   }
   @keyframes flutuarEnvelope {
-    0%, 100% { translate: 0 0; }
-    50% { translate: 0 -9px; }
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-10px); }
   }
 
-  .caixa-base {
+  .envelope .corpo {
     position: absolute;
-    left: 8px;
-    right: 8px;
-    bottom: 4px;
-    height: 112px;
-    border: 1px solid #ff9a9e;
-    border-radius: 16px 16px 24px 24px;
-    background: linear-gradient(145deg, #f34754, #bd1029 45%, #720b20);
-    box-shadow: inset 0 5px 12px #ff9a9e66, inset 0 -12px 18px #38000e99;
+    inset: 0;
+    background: #fff0f5;
+    border-radius: 14px;
+    box-shadow: 0 0 24px rgba(255, 60, 110, .5);
+    overflow: hidden;
   }
-  .caixa-base::after {
-    content: "";
+  .envelope .aba {
     position: absolute;
-    inset: 9px;
-    border: 1px solid #ffc5a055;
-    border-radius: 10px 10px 18px 18px;
-  }
-
-  .interior {
-    position: absolute;
-    left: 22px;
-    right: 22px;
-    bottom: 32px;
-    height: 72px;
-    border-radius: 50% 50% 15px 15px;
-    background: radial-gradient(ellipse, #24040d, #500a1a 72%);
-    box-shadow: inset 0 5px 12px #100007;
-  }
-
-  .anel {
-    position: absolute;
-    z-index: 1;
-    left: 50%;
-    bottom: 52px;
-    width: 68px;
-    height: 68px;
-    border-width: 9px;
-    border: 7px solid #f5d77d;
-    border-bottom-color: #b88625;
-    border-radius: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    filter: drop-shadow(0 0 8px #ffd96b);
-    transition: opacity .6s .25s, transform .8s .2s;
-  }
-  .anel::before {
-    content: "";
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    left: 11px;
-    top: -13px;
-    background: linear-gradient(135deg, #fff8cc, #e7b83f 65%, #fff1ae);
-    transform: rotate(45deg);
-    border-radius: 3px;
-    box-shadow: 0 0 12px #ffe782;
-  }
-
-  .tampa {
-    position: absolute;
-    left: 8px;
-    right: 8px;
-    top: 18px;
-    height: 87px;
+    top: 0; left: 0; right: 0;
+    height: 28%;
+    background: #ffc2d9;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transition: transform .8s ease;
     z-index: 2;
-    border: 1px solid #ffb0a2;
-    border-radius: 19px 19px 12px 12px;
-    background: linear-gradient(135deg, #ff5260, #c51430 58%, #810b24);
-    transform-origin: bottom;
-    transition: transform .85s cubic-bezier(.2, .8, .2, 1);
-    box-shadow: inset 0 5px 10px #ffb7a266, inset 0 -5px 9px #60001588, 0 9px 12px #26000b66;
   }
-  .tampa::before {
-    content: "";
+  .envelope .selo {
     position: absolute;
-    inset: 8px;
-    border: 1px solid #ffd28b88;
-    border-radius: 12px 12px 7px 7px;
-  }
-
-  .lacinho {
-    position: absolute;
-    left: 50%;
-    top: 49px;
-    z-index: 3;
-    width: 34px;
-    height: 30px;
+    left: 50%; bottom: 14px;
     transform: translateX(-50%);
-    transition: opacity .3s;
+    font-size: 34px;
+    z-index: 4;
+    transition: opacity .4s;
   }
-  .lacinho::before,
-  .lacinho::after {
-    content: "";
-    position: absolute;
-    top: 2px;
-    width: 17px;
-    height: 22px;
-    border: 2px solid #f8dc9a;
-    border-radius: 70% 35% 70% 35%;
-    background: linear-gradient(135deg, #ffe6aa, #be8b39);
-  }
-  .lacinho::before {
-    right: 15px;
-    transform: rotate(-25deg);
-  }
-  .lacinho::after {
-    left: 15px;
-    transform: scaleX(-1) rotate(-25deg);
-  }
+  .envelope.aberto .aba { transform: rotateX(180deg); }
+  .envelope.aberto .selo { opacity: 0; }
 
-  .anel-caixa.aberta .tampa {
-    transform: rotateX(125deg) translateY(-6px);
-  }
-  .anel-caixa.aberta .lacinho { opacity: 0; }
-  .anel-caixa.aberta .anel {
-    opacity: 1;
-    transform: translateX(-50%);
-  }
-
-  .pergunta {
+  .envelope .carta-papel {
     position: absolute;
-    width: 340px;
-    left: 50%;
-    top: -72px;
-    transform: translateX(-50%) translateY(8px);
+    left: 10px; right: 10px; top: 30px;
+    height: 160px;
+    background: #fff;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: 'Georgia', serif;
+    color: #7a0f2e;
     text-align: center;
-    color: #ffe6bc;
-    font-size: 23px;
-    line-height: 1.35;
-    opacity: 0;
-    transition: opacity .6s .4s, transform .6s .4s;
-    text-shadow: 0 2px 12px #ff315b;
-    pointer-events: none;
+    transform: translateY(0);
+    transition: transform 1s ease .3s;
+    z-index: 3;
   }
-  .anel-caixa.aberta .pergunta {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  .anel-caixa.mini {
-    --escala: .62;
-    animation: none;
-  }
+  .envelope.aberto .carta-papel { transform: translateY(-120px); }
+  .carta-papel h2 { font-size: 22px; margin-bottom: 8px; }
+  .carta-papel p { font-size: 15px; line-height: 1.5; }
+
   #carta .dica {
     position: absolute;
-    bottom: 38px;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
     color: #ffc2d9;
+    font-family: 'Georgia', serif;
     font-style: italic;
     font-size: 15px;
     opacity: .85;
-  }
-  .dica.escondida {
-    opacity: 0;
-    transition: opacity .3s;
-  }
-
-  @media (max-height: 650px) {
-    body { justify-content: flex-start; }
-    #palco { min-height: 160px; }
-    .anel-caixa.mini { --escala: .52; }
   }
 </style>
 </head>
 <body>
 
 <div id="carta">
-  <div class="anel-caixa" id="anelCaixa" role="button" tabindex="0" aria-label="Abrir a caixa de alianças">
-    <div class="pergunta">Vamos passar o resto de nossas vidas tomando açai juntos ?</div>
-    <div class="interior"></div>
-    <div class="anel"></div>
-    <div class="caixa-base"></div>
-    <div class="tampa"></div>
-    <div class="lacinho"></div>
+  <div class="envelope" id="envelope">
+    <div class="corpo"></div>
+    <div class="carta-papel">
+      <h2>muita aura fy</h2>
+      <p>Curte a vibe.<br>💌</p>
+    </div>
+    <div class="aba"></div>
+    <div class="selo">💖</div>
   </div>
-  <div class="dica" id="dica">toque na caixinha para abrir</div>
+  <div class="dica">toque no envelope para abrir</div>
 </div>
 
 <div id="palco"></div>
-<div id="pedido-area"></div>
 
 <div id="controles">
-  <div id="botoes-resposta">
-    <button id="btnAceito" type="button">Aceito</button>
-    <button id="btnDesculpa" type="button">Desculpa</button>
-  </div>
-  <button id="btnIniciar">Reiniciar</button>
-  <div id="resposta" aria-live="polite"></div>
+  <button id="btnIniciar">▶ Começar</button>
 </div>
 
 <script>
@@ -362,23 +196,26 @@
   //  Os tempos precisam estar em ordem crescente.
   // ==========================================================
   const LINHAS = [
-    { tempo: 3.5, texto: "O quarto meio escuro, a janela aberta" },
-    { tempo: 5.5, texto: "A porta encostada, a Lua está tão bela" },
-    { tempo: 9.5, texto: "E eu tô aqui sentindo falta de você" },
-    { tempo: 13.5, texto: "Já vi todos os filmes, li todos os livros" },
-    { tempo: 16.5, texto: "E tô esperando a próxima novela" },
-    { tempo: 19.5, texto: "Tudo porque eu tô tentando te esquecer" },
-    { tempo: 25.5, texto: "E em qualquer lugar que eu vou" },
-    { tempo: 27.5, texto: "Onde você está, eu estou, oh ohoh oh ohoh" },
-    { tempo: 34.5, texto: "O meu pensamento te segue" },
-    { tempo: 36.5, texto: "Minha saudade te persegue" },
-    { tempo: 39.5, texto: "O meu amor não envelhece" },
-    { tempo: 41.5, texto: "Cê não sai da minha mente" },
-    { tempo: 44.5, texto: "É que você me causa febre" },
-    { tempo: 47.5, texto: "De uns 40 graus ou um pouco mais" },
-    { tempo: 49.5, texto: "Eu quero é você, eu amo só você" },
-    { tempo: 54.5, texto: "E o resto tanto faz, tanto faz" }
+    { tempo: 3.5,    texto: "O quarto meio escuro, a janela aberta" },
+    { tempo: 5.5,    texto: "A porta encostada, a Lua está tão bela" },
+    { tempo: 9.5,    texto: "E eu tô aqui sentindo falta de você" },
+    { tempo: 13.5,   texto: "Já vi todos os filmes, li todos os livros" },
+    { tempo: 16.5,   texto: "E tô esperando a próxima novela" },
+    { tempo: 19.5,   texto: "Tudo porque eu tô tentando te esquecer" },
+    { tempo: 25.5,   texto: "E em qualquer lugar que eu vou" },
+    { tempo: 27.5,   texto: "Onde você está, eu estou, oh ohoh oh ohoh" },
+    { tempo: 34.5,   texto: "O meu pensamento te segue" },
+    { tempo: 36.5,   texto: "Minha saudade te persegue" },
+    { tempo: 39.5,   texto: "O meu amor não envelhece" },
+    { tempo: 41.5,   texto: "Cê não sai da minha mente" },
+    { tempo: 44.5,   texto: "É que você me causa febre" },
+    { tempo: 47.5,   texto: "De uns 40 graus ou um pouco mais" },
+    { tempo: 49.5,   texto: "Eu quero é você, eu amo só você" },
+    { tempo: 54.5,   texto: "E o resto tanto faz, tanto faz" },
+    
+    
   ];
+
 
   const AUDIO_SRC = "ssstik.io_1794321796998.mp3";
 
@@ -392,40 +229,14 @@
   const palco = document.getElementById("palco");
   const btn = document.getElementById("btnIniciar");
   const carta = document.getElementById("carta");
-  const anelCaixa = document.getElementById("anelCaixa");
-  const dica = document.getElementById("dica");
-  const pedidoArea = document.getElementById("pedido-area");
-  const resposta = document.getElementById("resposta");
+  const envelope = document.getElementById("envelope");
 
-  let caixaIniciada = false;
-
-  function abrirCaixa() {
-    if (caixaIniciada) return;
-    caixaIniciada = true;
-    anelCaixa.classList.add("aberta");
-    dica.classList.add("escondida");
-
+  envelope.addEventListener("click", () => {
+    envelope.classList.add("aberto");
     setTimeout(() => {
-      pedidoArea.appendChild(anelCaixa);
-      requestAnimationFrame(() => anelCaixa.classList.add("mini"));
       carta.classList.add("oculta");
-      btn.click();
-    }, 1700);
-  }
-
-  anelCaixa.addEventListener("click", abrirCaixa);
-  anelCaixa.addEventListener("keydown", e => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      abrirCaixa();
-    }
-  });
-
-  document.getElementById("btnAceito").addEventListener("click", () => {
-    resposta.textContent = "Meu coração já estava esperando por esse sim. 💍❤️";
-  });
-  document.getElementById("btnDesculpa").addEventListener("click", () => {
-    resposta.textContent = "Tudo bem. Obrigado por ouvir essa canção comigo. ❤️";
+      btn.click(); // começa a letra e o áudio junto com a carta
+    }, 1400);
   });
 
   const elementos = LINHAS.map(linha => {
@@ -467,9 +278,7 @@
     elementos.forEach((item, i) => {
       if (i === ativo) {
         item.div.classList.add("ativa");
-        const fim = LINHAS[i + 1]
-          ? LINHAS[i + 1].tempo
-          : LINHAS[i].tempo + 4;
+        const fim = LINHAS[i + 1] ? LINHAS[i + 1].tempo : LINHAS[i].tempo + 4;
         const duracao = Math.max((fim - LINHAS[i].tempo) * FATOR_DURACAO, 0.1);
         const progresso = Math.min((t - LINHAS[i].tempo) / duracao, 1);
         const quantas = Math.ceil(progresso * item.spans.length);
@@ -498,6 +307,7 @@
       audio.play()
         .then(() => { usandoAudio = true; })
         .catch(() => {
+          // Se o áudio não tocar, a letra continua no relógio, para não travar.
           usandoAudio = false;
           inicio = performance.now();
           alert("Não consegui tocar o áudio. Confira o nome em AUDIO_SRC e se o arquivo está na mesma pasta.");
@@ -508,9 +318,10 @@
     frameId = requestAnimationFrame(atualizar);
   }
 
+  // Um único evento: começa e, nos próximos cliques, reinicia sem recarregar
   btn.addEventListener("click", iniciar);
 
-  const simbolos = ["❤ Aline Prints", "💗", "💕 Aline Prints", "♥"];
+  const simbolos = ["❤ Eloiza", "💗", "💕 Eloiza", "♥"];
   const cores = ["#ff4d88", "#ff80ab", "#ffc1d6", "#e0245e", "#ff1744"];
 
   function criarCoracao() {
@@ -526,7 +337,6 @@
     document.body.appendChild(c);
     setTimeout(() => c.remove(), duracao * 1000);
   }
-
   setInterval(criarCoracao, 350);
 </script>
 
