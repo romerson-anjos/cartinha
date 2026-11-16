@@ -1,568 +1,1123 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Amor 💖</title>
-<style>
-:root{--pink:#ff75b3;--cream:#fff0f7}
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#08030a;color:var(--cream);font-family:Georgia,"Times New Roman",serif}
-#galaxia{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 55%,#451124 0,#200a17 36%,#0c0610 72%,#050308 100%);touch-action:none}
-#ceu{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
-#dica{position:absolute;top:16px;left:50%;transform:translateX(-50%);z-index:4;width:max-content;max-width:94vw;text-align:center;color:#ffd4e3b8;font:11px Arial,sans-serif;letter-spacing:.13em;text-transform:uppercase;pointer-events:none}
-#versiculos{position:absolute;inset:0;z-index:5;pointer-events:none}
-.versiculo{position:absolute;left:0;top:0;transform:translate(-50%,-50%);pointer-events:auto;border:1px solid #ffabc777;border-radius:999px;padding:9px 14px;background:linear-gradient(135deg,#711b3be8,#200714f2);box-shadow:0 0 18px #ff3c8840,inset 0 0 12px #ff75b022;color:#ffe5ef;white-space:nowrap;cursor:pointer;font:14px Georgia,serif;transition:scale .25s,border-color .25s;z-index:1}
-.versiculo:hover,.versiculo:focus-visible{scale:1.1;border-color:#ffd4e5;box-shadow:0 0 25px #ff59a9aa;outline:none}
-#reiniciar{position:absolute;z-index:7;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);border:1px solid #ffabc788;border-radius:999px;padding:11px 25px;background:linear-gradient(135deg,#b5225e,#70123e);box-shadow:0 0 20px #ff4c9266;color:#fff;cursor:pointer;font:15px Georgia,serif;transition:filter .2s}
-#reiniciar:hover{filter:brightness(1.15)}
-#modal,#carta{position:fixed;inset:0;display:grid;place-items:center;padding:22px;background:#09030adb;backdrop-filter:blur(10px);transition:opacity .6s,visibility .6s}
-#modal{z-index:12}
-#carta{z-index:15;background:radial-gradient(ellipse at 50% 35%,#421326ee,#08030af7 74%);perspective:1200px}
-.escondido{opacity:0;visibility:hidden;pointer-events:none}
-#cartaoVersiculo{width:min(90vw,470px);padding:38px 30px;border:1px solid #ffb8d477;border-radius:26px;text-align:center;background:linear-gradient(145deg,#54172cef,#1b0815f2);box-shadow:0 20px 80px #000a,0 0 45px #fa428833;animation:entrada .45s ease-out}
-@keyframes entrada{from{transform:rotateY(-12deg) translateY(12px);opacity:0}to{transform:none;opacity:1}}
-#referencia{margin:0 0 16px;color:#ffc4dc;font:11px Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase}
-#textoVersiculo{margin:0;color:#fff0f7;font-size:clamp(23px,4vw,34px);line-height:1.45;text-shadow:0 0 18px #ff70ad55}
-.botaoFechar{margin-top:24px;border:1px solid #ffabc766;border-radius:999px;padding:10px 18px;background:#51132f;color:#ffe8f1;cursor:pointer}
-#folha{position:relative;width:min(86vw,390px);height:min(500px,72vh);transform-style:preserve-3d;transition:transform .15s ease-out;filter:drop-shadow(0 28px 40px #0009)}
-#dentroCarta{position:absolute;inset:0;border-radius:8px 8px 18px 18px;background:linear-gradient(145deg,#fff3f7,#e9bfcf);box-shadow:inset 0 0 0 10px #ffffff70,inset 0 0 0 11px #bc66825c;display:flex;align-items:center;justify-content:center;color:#6d1738;text-align:center;padding:30px}
-#dentroCarta h1{font-size:clamp(32px,6vw,48px);font-weight:normal;margin:0 0 14px}
-#dentroCarta p{font-size:16px;font-style:italic;line-height:1.7;margin:0}
-#capaCarta{position:absolute;inset:0;z-index:2;transform-origin:left center;transform-style:preserve-3d;transition:transform 1.3s cubic-bezier(.2,.75,.2,1);border-radius:8px 8px 18px 18px;background:linear-gradient(135deg,#7f193c,#4e0e2b 70%,#30071c);border:1px solid #ffb6d388;display:grid;place-items:center;backface-visibility:hidden}
-#capaCarta:before{content:"";position:absolute;inset:14px;border:1px solid #f6b0cd66;border-radius:5px 5px 14px 14px}
-#capaTitulo{text-align:center;padding:25px;color:#ffe6ef}
-#capaTitulo span{display:block;font-size:58px;color:#ff85b9;text-shadow:0 0 25px #ff2781;animation:pulsar 1.5s ease-in-out infinite}
-#capaTitulo strong{display:block;margin-top:12px;font-size:29px;font-weight:normal;line-height:1.35}
-#capaTitulo small{display:block;margin-top:15px;color:#ffc5dc;font:11px Arial,sans-serif;letter-spacing:.22em}
-@keyframes pulsar{50%{transform:scale(1.14)}}
-#abrir{position:absolute;left:50%;bottom:20px;z-index:4;transform:translateX(-50%);white-space:nowrap;border:1px solid #ff9ac5;border-radius:999px;padding:11px 19px;background:linear-gradient(135deg,#b5225e,#70123e);box-shadow:0 0 18px #ff4c9266;color:#fff;cursor:pointer;font:15px Georgia,serif}
-#carta.aberta #capaCarta{transform:rotateY(-165deg)}
-#carta.aberta #abrir{opacity:0;pointer-events:none}
-@media(max-width:600px){#dica{font-size:9px;letter-spacing:.06em}.versiculo{padding:7px 9px;font-size:11px}#reiniciar{font-size:13px;padding:9px 18px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Para você</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --fundo: #080203;
+      --vinho: #2a0509;
+      --vermelho: #f23636;
+      --vermelho-escuro: #a8071a;
+      --vermelho-claro: #ff4949;
+      --dourado: #ffd0a0;
+      --texto: #fff4f2;
+      --vidro: rgba(28, 4, 7, .76);
+      --borda: rgba(255, 105, 105, .38);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      color: var(--texto);
+      background: radial-gradient(ellipse at 50% 38%, var(--vinho), var(--fundo) 72%);
+      font-family: "Cormorant Garamond", Georgia, serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    #galaxy {
+      touch-action: pan-y;
+      transition: filter 1.5s ease;
+    }
+
+    #galaxy.blur { filter: blur(9px) brightness(.68); }
+
+    #warp {
+      z-index: 6;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s cubic-bezier(.2,.75,.2,1);
+    }
+
+    #warp.on { opacity: 1; }
+
+    .intro {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      text-align: center;
+      transition: opacity 1.2s cubic-bezier(.2,.75,.2,1), visibility 1.2s;
+    }
+
+    .intro.hide { opacity: 0; visibility: hidden; }
+
+    h1 {
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(2.8rem, 10vw, 5.4rem);
+      font-weight: 400;
+      text-shadow: 0 0 26px rgba(242, 54, 54, .75);
+    }
+
+    .intro p {
+      margin: .6rem 0 1.7rem;
+      color: #edc4c4;
+      font-size: clamp(1rem, 3.5vw, 1.3rem);
+      font-style: italic;
+    }
+
+    button {
+      color: var(--texto);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    button:focus-visible {
+      outline: 2px solid var(--dourado);
+      outline-offset: 4px;
+    }
+
+    .entrar {
+      border: 0;
+      border-radius: 999px;
+      padding: .9em 1.8em;
+      background: linear-gradient(135deg, var(--vermelho), var(--vermelho-escuro));
+      box-shadow: 0 0 30px rgba(242, 54, 54, .58);
+      font-size: 1.15rem;
+      animation: pulsar 2.4s ease-in-out infinite;
+    }
+
+    @keyframes pulsar {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.055); }
+    }
+
+    .card {
+      position: fixed;
+      z-index: 4;
+      left: 50%;
+      bottom: max(18px, env(safe-area-inset-bottom));
+      width: min(560px, calc(100% - 32px));
+      padding: clamp(18px, 4vw, 28px);
+      border: 1px solid var(--borda);
+      border-radius: 22px;
+      background: var(--vidro);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      text-align: center;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translate(-50%, 24px);
+      transition: opacity 1s cubic-bezier(.2,.75,.2,1),
+                  transform 1s cubic-bezier(.2,.75,.2,1),
+                  visibility 1s;
+    }
+
+    .card.show {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translate(-50%, 0);
+    }
+
+    .kicker {
+      margin-bottom: 14px;
+      color: var(--dourado);
+      font: .8rem Arial, sans-serif;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    .versiculo {
+      min-height: 100px;
+      display: grid;
+      place-items: center;
+      opacity: 1;
+      transition: opacity .35s ease, transform .35s ease;
+    }
+
+    .versiculo.trocando {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    .versiculo blockquote {
+      font-size: clamp(1.3rem, 4.5vw, 1.8rem);
+      font-style: italic;
+      line-height: 1.35;
+      text-wrap: balance;
+    }
+
+    .versiculo figcaption {
+      margin-top: .8rem;
+      color: var(--dourado);
+      font: .78rem Arial, sans-serif;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .arrow {
+      flex: 0 0 44px;
+      height: 44px;
+      border: 1px solid var(--borda);
+      border-radius: 50%;
+      background: rgba(255, 80, 80, .1);
+      font-size: 1.6rem;
+      transition: background .25s ease, transform .25s ease;
+    }
+
+    .arrow:hover {
+      background: rgba(242, 54, 54, .3);
+      transform: scale(1.06);
+    }
+
+    .dots {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 105, 105, .38);
+      transition: transform .3s ease, background .3s ease;
+    }
+
+    .dot.on {
+      background: var(--vermelho-claro);
+      transform: scale(1.45);
+    }
+
+    .dica-rolagem {
+      margin-top: 14px;
+      color: #dcb2ad;
+      font-size: .9rem;
+      opacity: .82;
+      animation: descer-dica 1.8s ease-in-out infinite;
+    }
+
+    @keyframes descer-dica {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
+
+    /* Segunda cena: pétalas e caixa de aliança */
+    #aliancas {
+      position: relative;
+      z-index: 8;
+      height: 320vh;
+      margin-top: 100vh;
+      overflow: clip;
+      isolation: isolate;
+      background: radial-gradient(ellipse at 50% 46%, #30070b 0%, #100205 58%, #050102 100%);
+    }
+
+    .aliancas-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      min-height: 560px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      perspective: 1200px;
+    }
+
+    .aliancas-titulo {
+      position: absolute;
+      z-index: 2;
+      top: clamp(38px, 9vh, 90px);
+      width: 100%;
+      padding: 0 20px;
+      text-align: center;
+      pointer-events: none;
+      text-shadow: 0 0 25px #d2182d88;
+    }
+
+    .aliancas-titulo h2 {
+      color: #fff0ed;
+      font: 400 clamp(2.5rem, 7vw, 4.8rem)/1.05 "Great Vibes", cursive;
+    }
+
+    .aliancas-titulo p {
+      margin-top: 12px;
+      color: #e7b9b4;
+      font-size: clamp(1rem, 2.6vw, 1.3rem);
+      font-style: italic;
+    }
+
+    .petalas {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .petala {
+      position: absolute;
+      top: -12vh;
+      left: var(--left);
+      width: var(--size);
+      height: calc(var(--size) * .68);
+      border-radius: 80% 8% 76% 12%;
+      background: radial-gradient(ellipse at 28% 25%, #ff7771 0%, #d21b2c 46%, #720714 100%);
+      box-shadow: inset 1px 1px 4px #ffb2a666, 0 2px 12px #8c071844;
+      opacity: var(--opacity);
+      filter: blur(var(--softness));
+      animation: cair-petala var(--duration) var(--delay) linear infinite;
+      will-change: transform;
+    }
+
+    @keyframes cair-petala {
+      0% { transform: translate3d(0, -12vh, 0) rotate(0); }
+      100% { transform: translate3d(var(--drift), 112vh, 0) rotate(var(--spin)); }
+    }
+
+    .caixa-movimento {
+      position: absolute;
+      z-index: 3;
+      left: 50%;
+      top: 53%;
+      width: min(520px, 78vw);
+      height: min(480px, 74vw);
+      transform-style: preserve-3d;
+      transform: translate3d(-50%, -50%, 0);
+      will-change: transform;
+      filter: drop-shadow(0 28px 34px #000b) drop-shadow(0 0 34px #8d101a44);
+    }
+
+    .caixa-3d {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transform: rotateX(12deg) rotateY(-10deg) rotateZ(-8deg);
+    }
+
+    .interior-caixa {
+      position: absolute;
+      left: 9%;
+      right: 9%;
+      bottom: 7%;
+      height: 47%;
+      border: 1px solid #b99868;
+      border-radius: 12px 12px 20px 20px;
+      background: linear-gradient(145deg, #171513, #050505 65%, #211c16);
+      box-shadow: inset 0 8px 14px #000, inset 0 0 0 5px #ffffff08;
+      transform: translateZ(4px);
+    }
+
+    .forro {
+      position: absolute;
+      inset: 8px 10px 12px;
+      border-radius: 8px 8px 15px 15px;
+      background: radial-gradient(ellipse at 50% 30%, #302b27, #100f0e 72%);
+      box-shadow: inset 0 5px 12px #000a;
+    }
+
+    .base-frente {
+      position: absolute;
+      left: 9%;
+      right: 9%;
+      bottom: 0;
+      height: 15%;
+      border: 1px solid #8f744d;
+      border-top-color: #c1a273;
+      border-radius: 3px 3px 16px 16px;
+      background: linear-gradient(180deg, #22201e, #080808 72%);
+      transform: translateZ(15px);
+    }
+
+    .filete-caixa {
+      position: absolute;
+      left: 13%;
+      right: 13%;
+      bottom: 16%;
+      height: 2px;
+      z-index: 2;
+      background: linear-gradient(90deg, transparent, #d0b27d, #f1dfb5, #b2925c, transparent);
+      box-shadow: 0 0 9px #d4b47766;
+    }
+
+    .tampa-3d {
+      position: absolute;
+      z-index: 5;
+      left: 9%;
+      right: 9%;
+      top: 6%;
+      height: 38%;
+      border: 1px solid #8b704b;
+      border-radius: 14px 14px 8px 8px;
+      background: linear-gradient(145deg, #242220, #090909 58%, #171512);
+      box-shadow: inset 0 0 0 5px #ffffff08,
+                  inset 0 2px 9px #ffffff12,
+                  0 10px 16px #0009;
+      transform-origin: 50% 100%;
+      transform: rotateX(0);
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .tampa-3d::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 1px solid #b39360aa;
+      border-radius: 9px 9px 5px 5px;
+      box-shadow: inset 0 0 14px #0008;
+    }
+
+    .tampa-3d::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -5px;
+      width: 26px;
+      height: 7px;
+      border-radius: 50%;
+      background: linear-gradient(#e5c58e, #80633b);
+      transform: translateX(-50%);
+      box-shadow: 0 2px 6px #000;
+    }
+
+    .anel-berco {
+      position: absolute;
+      z-index: 8;
+      left: 50%;
+      top: 47%;
+      width: 62%;
+      transform: translate(-50%, -50%) translateZ(16px) scale(.68);
+      opacity: 0;
+      filter: drop-shadow(0 0 18px #d9a94b88);
+      will-change: transform, opacity;
+    }
+
+    .anel-berco svg {
+      display: block;
+      width: 100%;
+      overflow: visible;
+    }
+
+    .brilho-joia {
+      animation: brilho-joia 2.8s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    @keyframes brilho-joia {
+      0%, 100% { opacity: .72; filter: drop-shadow(0 0 3px #fff4c8); }
+      50% { opacity: 1; filter: drop-shadow(0 0 12px #fff4c8); }
+    }
+
+    .legenda-alianca {
+      position: absolute;
+      z-index: 4;
+      bottom: max(38px, env(safe-area-inset-bottom));
+      width: 100%;
+      padding: 0 22px;
+      text-align: center;
+      color: #f0d7ce;
+      font-size: clamp(1rem, 2.8vw, 1.3rem);
+      opacity: 0;
+      transform: translateY(14px);
+      text-shadow: 0 2px 12px #000;
+      pointer-events: none;
+    }
+
+    /* Dissolve a primeira cena enquanto as pétalas entram. */
+    #galaxy {
+      opacity: calc(1 - var(--scene-fade, 0));
+      transition: opacity .12s linear, filter 1.5s ease;
+    }
+
+    #warp.on {
+      opacity: calc(1 - var(--scene-fade, 0));
+      transition: opacity .12s linear;
+    }
+
+    .intro:not(.hide) {
+      opacity: calc(1 - var(--scene-fade, 0));
+      transition: none;
+    }
+
+    .card.show {
+      opacity: calc(1 - var(--scene-fade, 0));
+      transition: opacity .12s linear,
+                  transform 1s cubic-bezier(.2,.75,.2,1),
+                  visibility 1s;
+    }
+
+    body.segunda-parte #galaxy,
+    body.segunda-parte #warp,
+    body.segunda-parte .intro,
+    body.segunda-parte .card {
+      pointer-events: none;
+    }
+
+    @media (max-width: 600px) {
+      .card { padding: 18px; }
+      .versiculo { min-height: 120px; }
+      .aliancas-sticky { min-height: 520px; }
+
+      .caixa-movimento {
+        width: min(380px, 84vw);
+        height: min(360px, 82vw);
+      }
+
+      .aliancas-titulo { top: 10vh; }
+      .legenda-alianca { bottom: max(28px, env(safe-area-inset-bottom)); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
-<main id="galaxia">
-  <canvas id="ceu"></canvas>
-  <div id="dica">Arraste para girar · use a roda ou pinça para aproximar</div>
-  <div id="versiculos"></div>
-  <button id="reiniciar" type="button">↺ Reiniciar</button>
-</main>
+  <canvas id="galaxy" class="blur" aria-hidden="true"></canvas>
+  <canvas id="warp" aria-hidden="true"></canvas>
 
-<section id="modal" class="escondido" role="dialog" aria-modal="true" aria-labelledby="referencia">
-  <article id="cartaoVersiculo">
-    <h2 id="referencia"></h2>
-    <p id="textoVersiculo"></p>
-    <button class="botaoFechar" id="fechar" type="button">Fechar</button>
-  </article>
-</section>
+  <audio id="musica" preload="auto" src="musical.mp3"></audio>
 
-<section id="carta" aria-label="Carta para meu amor">
-  <div id="folha">
-    <div id="dentroCarta">
-      <div>
-        <h1>curte a vibe,<br>💕</h1>
-        <p>Em cada estrela, uma lembrança.<br>Em cada palavra, um pedacinho do meu coração.</p>
-      </div>
+  <section class="intro" id="intro">
+    <div>
+      <h1>Isto é só para você</h1>
+      <p>Respire fundo e entre na nossa galáxia…</p>
+      <button class="entrar" id="entrar" type="button">♥ Toque para entrar</button>
     </div>
-    <div id="capaCarta">
-      <div id="capaTitulo">
-        <span>♥</span>
-        <strong>abre aí 😉<br>💕</strong>
-        <small>UMA CARTA FEITA DE ESTRELAS</small>
+  </section>
+
+  <section class="card" id="card" aria-live="polite">
+    <p class="kicker">Palavras para o nosso amor</p>
+    <figure class="versiculo" id="versiculo"></figure>
+    <nav class="nav">
+      <button class="arrow" id="prev" type="button" aria-label="Versículo anterior">‹</button>
+      <div class="dots" id="dots"></div>
+      <button class="arrow" id="next" type="button" aria-label="Próximo versículo">›</button>
+    </nav>
+    <p class="dica-rolagem">Role para baixo para ver a surpresa ↓</p>
+  </section>
+
+  <section id="aliancas" aria-label="Uma surpresa especial">
+    <div class="aliancas-sticky">
+      <div class="petalas" id="petalas" aria-hidden="true"></div>
+
+      <header class="aliancas-titulo">
+        <h2>Nosso próximo capítulo</h2>
+        <p>Uma promessa para guardar pertinho do coração…</p>
+      </header>
+
+      <div class="caixa-movimento" id="caixaMovimento">
+        <div class="caixa-3d">
+          <div class="interior-caixa">
+            <div class="forro"></div>
+          </div>
+
+          <div class="anel-berco" id="anelBerco" aria-hidden="true">
+            <svg viewBox="0 0 260 190">
+              <defs>
+                <linearGradient id="ouro" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#fff0a8"/>
+                  <stop offset=".18" stop-color="#b87916"/>
+                  <stop offset=".38" stop-color="#ffe98c"/>
+                  <stop offset=".58" stop-color="#d99b22"/>
+                  <stop offset=".78" stop-color="#fff2b0"/>
+                  <stop offset="1" stop-color="#8c570e"/>
+                </linearGradient>
+
+                <linearGradient id="pedra" x1="0" y1="0" x2="1" y2="1">
+                  <stop stop-color="#fff"/>
+                  <stop offset=".38" stop-color="#e8f1ff"/>
+                  <stop offset=".7" stop-color="#aebbd0"/>
+                  <stop offset="1" stop-color="#fff"/>
+                </linearGradient>
+
+                <radialGradient id="reflexo">
+                  <stop stop-color="#fff" stop-opacity=".9"/>
+                  <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <ellipse cx="130" cy="131" rx="68" ry="29"
+                fill="none" stroke="#5f390b" stroke-width="22" opacity=".65"/>
+              <ellipse cx="130" cy="123" rx="68" ry="29"
+                fill="none" stroke="url(#ouro)" stroke-width="17"/>
+              <path d="M66 121c14 17 31 25 64 27 31-1 51-10 65-27"
+                fill="none" stroke="#fff0a3" stroke-width="2.5" opacity=".85"/>
+              <path d="M111 94 119 78h22l8 16-19 24z"
+                fill="url(#ouro)" stroke="#ffe9a0" stroke-width="2"/>
+              <path d="M117 77 130 50l14 27-14 17z"
+                fill="url(#pedra)" stroke="#fff" stroke-width="2"/>
+              <path d="m130 50 1 44 13-17zM117 77h27"
+                fill="none" stroke="#aab8ca" stroke-width="1.5"/>
+              <circle class="brilho-joia" cx="128" cy="61" r="22" fill="url(#reflexo)"/>
+              <path d="M128 39v-15m-9 23-11-10m29 10 11-10"
+                stroke="#fff5cf" stroke-width="2" stroke-linecap="round" opacity=".8"/>
+            </svg>
+          </div>
+
+          <div class="base-frente"></div>
+          <div class="filete-caixa"></div>
+          <div class="tampa-3d" id="tampaCaixa"></div>
+        </div>
       </div>
+
+      <p class="legenda-alianca" id="legendaAlianca">
+        E se a nossa próxima promessa fosse para sempre?
+      </p>
     </div>
-  </div>
-  <button id="abrir" type="button">Abrir minha carta ✨</button>
-</section>
+  </section>
 
-<audio id="musica" preload="auto" src="musical.mp3"></audio>
+  <script>
+    const NOME = "Prints";
+    const AJUSTE_LETRA = 0;
 
-<script>
-const PALAVRA_CORACAO = "romerson";
+    const VERSICULOS = [
+      { texto: "O amor é paciente, o amor é bondoso. Não inveja, não se vangloria, não se orgulha.", ref: "1 Coríntios 13:4 · NVI" },
+      { texto: "Tudo sustenta, tudo crê, tudo espera, tudo suporta.", ref: "1 Coríntios 13:7 · NVI" },
+      { texto: "Muitas águas não podem apagar o amor; os rios não podem afogá-lo.", ref: "Cântico dos Cânticos 8:7 · NVI" },
+      { texto: "Dois são melhores que um, pois têm melhor retorno pelo seu trabalho. Se um cair, o outro pode ajudá-lo a levantar-se.", ref: "Eclesiastes 4:9-10 · NVI" },
+      { texto: "No amor não há medo; ao contrário, o perfeito amor expulsa o medo.", ref: "1 João 4:18 · NVI" },
+      { texto: "Por isso o homem deixará pai e mãe e se unirá à sua mulher, tornando-se os dois uma só carne.", ref: "Gênesis 2:24 · NVI" },
+      { texto: "Assim, permanecem estes três: fé, esperança e amor. O maior deles, porém, é o amor.", ref: "1 Coríntios 13:13 · NVI" }
+    ];
 
-const VERSICULOS = [
-  {nome:"💝", referencia:"Eclesiastes 4:9", texto:"Melhor é serem dois do que um."},
-  {nome:"❤️", referencia:"1 Coríntios 13:7", texto:"Tudo sofre, tudo crê, tudo espera, tudo suporta."},
-  {nome:"💞", referencia:"Cantares 8:7", texto:"As muitas águas não poderiam apagar este amor."},
-  {nome:"💘", referencia:"Colossenses 3:14", texto:"Acima de tudo, porém, revistam-se do amor."},
-  {nome:"❤️‍🔥", referencia:"1 João 4:19", texto:"Nós amamos porque ele nos amou primeiro."},
-  {nome:"💌", referencia:"Provérbios 17:17", texto:"Em todo o tempo ama o amigo."}
-];
+    const LETRA = [
+      { tempo: 16, texto: "Não mudei de cidade nem de telefone, só escolhi ser feliz" },
+      { tempo: 24, texto: "É o mesmo endereço, o mesmo apartamento em frente à igreja matriz" },
+      { tempo: 31, texto: "Por isso todo mundo passa e, quem nunca passou, vai passar" },
+      { tempo: 39, texto: "Já tô dizendo aos meus amigos: Calma, que eu não vou pirar" },
+      { tempo: 43, texto: "Já pirei" },
+      { tempo: 45, texto: "Me apaixonei" },
+      { tempo: 48, texto: "Perdidamente" },
+      { tempo: 51, texto: "E o que eu sei" },
+      { tempo: 54, texto: "É que daqui pra frente" },
+      { tempo: 58, texto: "Vai ser nossa cidade, nosso telefone" },
+      { tempo: 62, texto: "Nosso endereço, nosso apartamento" },
+      { tempo: 67, texto: "Sabe aquela igreja? Tô aqui na frente" },
+      { tempo: 72, texto: "Imaginando chuva de arroz na gente, Uoh-oh-oh-oh" },
+      { tempo: 90, texto: "Não mudei de cidade nem de telefone, só escolhi ser feliz" },
+      { tempo: 96, texto: "É o mesmo endereço, o mesmo apartamento em frente à igreja matriz" },
+      { tempo: 105, texto: "Por isso todo mundo passa e, quem nunca passou, vai passar" },
+      { tempo: 112, texto: "Já tô dizendo aos meus amigos: Calma, que eu não vou pirar" },
+      { tempo: 116, texto: "Já pirei" },
+      { tempo: 119, texto: "Me apaixonei" },
+      { tempo: 122, texto: "Perdidamente" },
+      { tempo: 126, texto: "E o que eu sei" },
+      { tempo: 129, texto: "É que daqui pra frente" },
+      { tempo: 133, texto: "Vai ser nossa cidade, nosso telefone" },
+      { tempo: 137, texto: "Nosso endereço, nosso apartamento" },
+      { tempo: 140, texto: "Sabe aquela igreja? Tô aqui na frente" },
+      { tempo: 144, texto: "Imaginando chuva" },
+      { tempo: 146, texto: "Vai ser nossa cidade, nosso telefone" },
+      { tempo: 152, texto: "Nosso endereço, nosso apartamento" },
+      { tempo: 156, texto: "Sabe aquela igreja? Tô aqui na frente" },
+      { tempo: 160, texto: "Imaginando chuva de arroz na gente" },
+      { tempo: 165, texto: "Uoh-oh-oh-oh" }
+    ];
 
-const LETRA = [
-  {tempo:3.5,texto:"A gente não precisa tar colado pra tar junto"},
-  {tempo:5.5,texto:"Os nossos corpos se conversam por horas e horas"},
-  {tempo:9.5,texto:"Sem palavras tão dizendo a todo instante um pro outro"},
-  {tempo:13.5,texto:"O quanto se adoram"},
-  {tempo:16.5,texto:"Eu não preciso te olhar"},
-  {tempo:17.5,texto:"Pra te ter em meu mundo"},
-  {tempo:20.5,texto:"Porque aonde quer que eu vá"},
-  {tempo:22.5,texto:"Você está em tudo"},
-  {tempo:24.5,texto:"Tudo, tudo que eu preciso, oh"},
-  {tempo:32.5,texto:"A gente não precisa tar colado pra tar junto"},
-  {tempo:34.5,texto:"Os nossos corpos se conversam por horas e horas"},
-  {tempo:38.5,texto:"Sem palavras tão dizendo a todo instante um pro outro"},
-  {tempo:42.5,texto:"O quanto se adoram"},
-  {tempo:45.5,texto:"Eu não preciso te olhar"},
-  {tempo:46.5,texto:"Pra te ter em meu mundo"},
-  {tempo:49.5,texto:"Porque aonde quer que eu vá"},
-  {tempo:51.5,texto:"Você está em tudo"},
-  {tempo:53.5,texto:"Tudo, tudo que eu preciso, oh"},
-  {tempo:57.5,texto:"Te vivoooo"}
-];
+    const canvas = document.getElementById("galaxy");
+    const ctx = canvas.getContext("2d", { alpha: true });
+    const warpCanvas = document.getElementById("warp");
+    const wctx = warpCanvas.getContext("2d", { alpha: true });
+    const audio = document.getElementById("musica");
+    const intro = document.getElementById("intro");
+    const card = document.getElementById("card");
+    const versoEl = document.getElementById("versiculo");
+    const dotsEl = document.getElementById("dots");
 
-const AJUSTE = 0;
-const audio = document.getElementById("musica");
-const canvas = document.getElementById("ceu");
-const ctx = canvas.getContext("2d");
-const modal = document.getElementById("modal");
-const carta = document.getElementById("carta");
-const versiculosBox = document.getElementById("versiculos");
+    let w = innerWidth, h = innerHeight;
+    let yaw = -.12, pitch = .52, zoom = 1;
+    let drag = null, warpStart = null;
+    let versoAtual = 0;
+    let letraAtual = -1, trocaLetra = 0;
 
-let w = innerWidth;
-let h = innerHeight;
-let yaw = -0.12;
-let pitch = 0.52;
-let zoom = 1;
-let drag = null;
-let iniciado = false;
-let audioSincronizado = false;
-let relogio = 0;
-let inicioRelogio = 0;
+    const camera = 1900;
+    const reducaoDpr = Math.min(devicePixelRatio || 1, 1.5);
 
-const posicoesSuaves = new WeakMap();
-let ultimoFrameVersiculos = 0;
+    const estrelas = Array.from({ length: 1200 }, () => ({
+      x: (Math.random() - .5) * 3600,
+      y: (Math.random() - .5) * 2100,
+      z: (Math.random() - .5) * 2400,
+      r: .35 + Math.random() * 1.3,
+      a: .2 + Math.random() * .7,
+      f: Math.random() * 6
+    }));
 
-const camera = 1900;
+    const poeira = Array.from({ length: 2200 }, () => {
+      const a = Math.random() * Math.PI * 2;
+      const r = Math.sqrt(Math.random()) * 1350;
 
-const estrelas = Array.from({length:1500}, () => ({
-  x: (Math.random() - .5) * 3600,
-  y: (Math.random() - .5) * 2100,
-  z: (Math.random() - .5) * 2400,
-  r: .35 + Math.random() * 1.35,
-  a: .2 + Math.random() * .72,
-  f: Math.random() * 6
-}));
-
-const poeira = Array.from({length:3600}, () => {
-  const a = Math.random() * Math.PI * 2;
-  const r = Math.sqrt(Math.random()) * 1350;
-
-  return {
-    x: Math.cos(a) * r,
-    y: 195 + (Math.random() - .5) * 30,
-    z: Math.sin(a) * r,
-    sz: .55 + Math.random() * 1.3,
-    f: Math.random() * 6
-  };
-});
-
-function pontoCoracao(a) {
-  return {
-    x: 16 * Math.pow(Math.sin(a), 3) / 18,
-    y: -(13 * Math.cos(a) - 5 * Math.cos(2*a) - 2 * Math.cos(3*a) - Math.cos(4*a)) / 18
-  };
-}
-
-const palavras = [];
-
-for (const camada of [
-  {qtd:32, raio:.97},
-  {qtd:20, raio:.68},
-  {qtd:12, raio:.36}
-]) {
-  for (let i = 0; i < camada.qtd; i++) {
-    const a = (i / camada.qtd) * Math.PI * 2 + (Math.random() - .5) * .025;
-    const p = pontoCoracao(a);
-
-    palavras.push({
-      x: p.x * camada.raio,
-      y: p.y * camada.raio,
-      f: Math.random() * 6.28,
-      z: (Math.random() - .5) * 10
-    });
-  }
-}
-
-const locaisVersiculos = [
-  [-620,-120,60],
-  [600,-210,-30],
-  [760,190,75],
-  [-700,250,-50],
-  [-230,470,30],
-  [190,-440,50]
-];
-
-function criarVersiculos() {
-  versiculosBox.innerHTML = "";
-
-  VERSICULOS.forEach(v => {
-    const botao = document.createElement("button");
-    botao.type = "button";
-    botao.className = "versiculo";
-    botao.textContent = "✦ " + v.nome;
-    botao.setAttribute("aria-label", "Abrir versículo: " + v.nome);
-
-    botao.addEventListener("click", () => {
-      document.getElementById("referencia").textContent = v.referencia;
-      document.getElementById("textoVersiculo").textContent = "“" + v.texto + "”";
-      modal.classList.remove("escondido");
+      return {
+        x: Math.cos(a) * r,
+        y: 195 + (Math.random() - .5) * 30,
+        z: Math.sin(a) * r,
+        size: .55 + Math.random() * 1.3,
+        f: Math.random() * 6
+      };
     });
 
-    versiculosBox.appendChild(botao);
-  });
-}
+    const pontosNome = [];
 
-function projetar(x, y, z) {
-  const cy = Math.cos(yaw);
-  const sy = Math.sin(yaw);
-  const cp = Math.cos(pitch);
-  const sp = Math.sin(pitch);
+    for (const camada of [
+      { qtd: 32, raio: .97 },
+      { qtd: 20, raio: .68 },
+      { qtd: 12, raio: .36 }
+    ]) {
+      for (let i = 0; i < camada.qtd; i++) {
+        const a = i / camada.qtd * Math.PI * 2;
+        const x = 16 * Math.pow(Math.sin(a), 3) / 18;
+        const y = -(13 * Math.cos(a) - 5 * Math.cos(2*a) -
+          2 * Math.cos(3*a) - Math.cos(4*a)) / 18;
 
-  const xr = x * cy + z * sy;
-  const zr = -x * sy + z * cy;
-  const yr = y * cp - zr * sp;
-  const zp = y * sp + zr * cp;
-  const dist = camera - zp;
-
-  if (dist < 120) return null;
-
-  const focal = Math.min(w, h) * 1.2 * zoom;
-  const s = focal / dist;
-
-  return {
-    x: w / 2 + xr * s,
-    y: h / 2 + yr * s,
-    s,
-    z: zp
-  };
-}
-
-function redimensionar() {
-  w = innerWidth;
-  h = innerHeight;
-
-  const d = Math.min(devicePixelRatio || 1, 2);
-  canvas.width = w * d;
-  canvas.height = h * d;
-  canvas.style.width = w + "px";
-  canvas.style.height = h + "px";
-  ctx.setTransform(d, 0, 0, d, 0, 0);
-}
-
-function tempoAtual() {
-  if (audioSincronizado && !audio.paused) return audio.currentTime;
-
-  return relogio +
-    (iniciado ? (performance.now() - inicioRelogio) / 1000 : 0);
-}
-
-function desenhar(ms) {
-  const t = ms / 1000;
-  const delta = ultimoFrameVersiculos
-    ? Math.min((ms - ultimoFrameVersiculos) / 1000, 0.05)
-    : 1;
-
-  ultimoFrameVersiculos = ms;
-  const suavidade = 1 - Math.exp(-delta * 5);
-  ctx.clearRect(0, 0, w, h);
-
-  for (const s of estrelas) {
-    const p = projetar(s.x, s.y, s.z);
-
-    if (!p || p.x < 0 || p.x > w || p.y < 0 || p.y > h) continue;
-
-    ctx.globalAlpha = s.a * (.78 + .22 * Math.sin(t * .35 + s.f));
-    ctx.fillStyle = "#ffe5f0";
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, Math.max(.35, s.r * p.s * .8), 0, 6.283);
-    ctx.fill();
-  }
-
-  ctx.globalAlpha = 1;
-
-  for (let i = 0; i < poeira.length; i++) {
-    const q = poeira[i];
-    const a = t * .018;
-    const r = Math.cos(a) * q.x + Math.sin(a) * q.z;
-    const z = -Math.sin(a) * q.x + Math.cos(a) * q.z;
-    const p = projetar(r, q.y, z);
-
-    if (!p || p.x < -3 || p.x > w + 3 || p.y < -3 || p.y > h + 3) continue;
-
-    ctx.globalAlpha =
-      (.32 + .48 * (.5 + .5 * Math.sin(t * .4 + q.f))) * Math.min(1, p.s);
-
-    ctx.fillStyle = i % 7 === 0 ? "#ff8abb" : "#ffdbea";
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, Math.max(.45, q.sz * p.s * .8), 0, 6.283);
-    ctx.fill();
-  }
-
-  ctx.globalAlpha = 1;
-
-  const centro = projetar(0, 195, 0);
-  const cx = centro ? centro.x : w / 2;
-  const cy = centro ? centro.y : h * .66;
-
-  let linha = "Te vivooo";
-  const segundo = tempoAtual() + AJUSTE;
-
-  for (let i = 0; i < LETRA.length; i++) {
-    if (segundo >= LETRA[i].tempo) linha = LETRA[i].texto;
-  }
-
-  const posLetra = projetar(0, -600, -12);
-
-  if (posLetra) {
-    ctx.save();
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.font =
-      "bold " + Math.max(44, Math.min(68, w * .057) * posLetra.s) + "px Cinzel";
-    ctx.shadowColor = "#ff3489";
-    ctx.shadowBlur = 24;
-    ctx.fillStyle = "rgba(255,215,232,.3)";
-    ctx.fillText(linha, posLetra.x, posLetra.y, Math.min(w * .9, 1100));
-    ctx.restore();
-  }
-
-  const largura = 700;
-  const altura = 640;
-  const pulsacao = 1 + .008 * Math.sin(t * .32);
-  const centroY = -205;
-
-  ctx.save();
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.shadowColor = "#ff3b96";
-  ctx.shadowBlur = 13;
-
-  for (let i = 0; i < palavras.length; i++) {
-    const q = palavras[i];
-    const p = projetar(
-      q.x * largura * .5 * pulsacao,
-      centroY + q.y * altura * .5 * pulsacao,
-      q.z
-    );
-
-    if (!p) continue;
-
-    ctx.globalAlpha = .76 + .12 * Math.sin(t * .28 + q.f);
-    ctx.fillStyle = i % 9 === 0 ? "#fff0d0" : "#ffd2e5";
-    ctx.font = "bold " + Math.max(8, Math.min(15, 13 * p.s)) + "px Georgia";
-    ctx.fillText(
-      PALAVRA_CORACAO,
-      p.x + Math.sin(t * .1 + q.f) * .35,
-      p.y + Math.cos(t * .1 + q.f) * .35
-    );
-  }
-
-  ctx.restore();
-  ctx.globalAlpha = 1;
-
-  if (centro) {
-    const raio = Math.min(w * .48, 650) * centro.s;
-
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.scale(1, .27);
-
-    const brilho = ctx.createRadialGradient(0, 0, 2, 0, 0, raio);
-    brilho.addColorStop(0, "#fff5d8");
-    brilho.addColorStop(.08, "#ffd363");
-    brilho.addColorStop(.18, "#ff5eaa");
-    brilho.addColorStop(1, "rgba(255,36,139,0)");
-
-    ctx.fillStyle = brilho;
-    ctx.beginPath();
-    ctx.arc(0, 0, raio, 0, 6.283);
-    ctx.fill();
-
-    ctx.fillStyle = "#050208";
-    ctx.beginPath();
-    ctx.ellipse(0, 0, Math.max(7, 18 * centro.s), Math.max(4, 9 * centro.s), 0, 0, 6.283);
-    ctx.fill();
-    ctx.restore();
-  }
-
-  const tempo = ms / 1000;
-
-  [...versiculosBox.children].forEach((b, i) => {
-    const base = locaisVersiculos[i % locaisVersiculos.length];
-    const fase = i * 2.1;
-
-    const x = base[0] + Math.sin(tempo * .08 + fase) * 24;
-    const y = base[1] + Math.cos(tempo * .06 + fase) * 18;
-    const z = base[2];
-
-    const p = projetar(x, y, z);
-
-    if (!p) {
-      b.style.display = "none";
-      return;
+        pontosNome.push({
+          x: x * camada.raio,
+          y: y * camada.raio,
+          f: Math.random() * 6.28,
+          z: (Math.random() - .5) * 10
+        });
+      }
     }
 
-    b.style.display = "block";
+    const estrelasWarp = Array.from({ length: 600 }, () => ({
+      a: Math.random() * Math.PI * 2,
+      fase: Math.random(),
+      velocidade: .6 + Math.random() * .8,
+      largura: .6 + Math.random() * 1.6,
+      cor: Math.random() < .25 ? "#ffd0a0" :
+        (Math.random() < .55 ? "#ff4949" : "#fff4f2")
+    }));
 
-    const atual = posicoesSuaves.get(b) || {x:p.x, y:p.y};
-    atual.x += (p.x - atual.x) * suavidade;
-    atual.y += (p.y - atual.y) * suavidade;
-    posicoesSuaves.set(b, atual);
+    function projetar(x, y, z) {
+      const cy = Math.cos(yaw), sy = Math.sin(yaw);
+      const cp = Math.cos(pitch), sp = Math.sin(pitch);
+      const xr = x * cy + z * sy;
+      const zr = -x * sy + z * cy;
+      const yr = y * cp - zr * sp;
+      const zp = y * sp + zr * cp;
+      const dist = camera - zp;
 
-    b.style.left = atual.x + "px";
-    b.style.top = atual.y + "px";
-    b.style.transform =
-      "translate(-50%,-50%) perspective(700px) rotateY(" +
-      yaw + "rad) rotateX(" + pitch + "rad) scale(1)";
+      if (dist < 120) return null;
 
-    b.style.zIndex = String(Math.round(10 + p.z / 100));
-  });
+      const s = Math.min(w, h) * 1.2 * zoom / dist;
+      return { x: w / 2 + xr * s, y: h / 2 + yr * s, s };
+    }
 
-  requestAnimationFrame(desenhar);
-}
+    function redimensionar() {
+      w = innerWidth;
+      h = innerHeight;
 
-function iniciarMusica() {
-  iniciado = true;
-  relogio = 0;
-  inicioRelogio = performance.now();
-  audioSincronizado = false;
+      for (const c of [canvas, warpCanvas]) {
+        c.width = w * reducaoDpr;
+        c.height = h * reducaoDpr;
+        c.style.width = w + "px";
+        c.style.height = h + "px";
+      }
 
-  try {
-    audio.currentTime = 0;
-    const tocando = audio.play();
+      ctx.setTransform(reducaoDpr, 0, 0, reducaoDpr, 0, 0);
+      wctx.setTransform(reducaoDpr, 0, 0, reducaoDpr, 0, 0);
+    }
 
-    if (tocando) {
-      tocando.then(() => {
-        audioSincronizado = true;
-      }).catch(() => {
-        audioSincronizado = false;
+    function desenharLetra(ms) {
+      const segundo = audio.currentTime + AJUSTE_LETRA;
+      let indice = -1;
+
+      for (let i = 0; i < LETRA.length; i++) {
+        if (segundo >= LETRA[i].tempo) indice = i;
+      }
+
+      if (indice !== letraAtual) {
+        letraAtual = indice;
+        trocaLetra = ms;
+      }
+
+      if (indice < 0) return;
+
+      const p = projetar(0, -600, -12);
+      if (!p) return;
+
+      const alfa = Math.min(1, (ms - trocaLetra) / 220);
+
+      ctx.save();
+      ctx.globalAlpha = alfa;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.font = "bold " + Math.max(22, Math.min(68, w * .057) * p.s) + "px Georgia";
+      ctx.shadowColor = "#ff3030";
+      ctx.shadowBlur = 22;
+      ctx.fillStyle = "#fff0ed";
+      ctx.fillText(LETRA[indice].texto, p.x, p.y, w * .9);
+      ctx.restore();
+    }
+
+    function desenhar(ms) {
+      const t = ms / 1000;
+      ctx.clearRect(0, 0, w, h);
+
+      for (const s of estrelas) {
+        const p = projetar(s.x, s.y, s.z);
+        if (!p || p.x < 0 || p.x > w || p.y < 0 || p.y > h) continue;
+
+        ctx.globalAlpha = s.a * (.78 + .22 * Math.sin(t * .35 + s.f));
+        ctx.fillStyle = "#ffe9e6";
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, Math.max(.35, s.r * p.s * .8), 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      for (let i = 0; i < poeira.length; i++) {
+        const q = poeira[i], a = t * .018;
+        const x = Math.cos(a) * q.x + Math.sin(a) * q.z;
+        const z = -Math.sin(a) * q.x + Math.cos(a) * q.z;
+        const p = projetar(x, q.y, z);
+
+        if (!p || p.x < -3 || p.x > w + 3 || p.y < -3 || p.y > h + 3) continue;
+
+        ctx.globalAlpha = (.32 + .48 * (.5 + .5 * Math.sin(t * .4 + q.f))) * Math.min(1, p.s);
+        ctx.fillStyle = i % 7 === 0 ? "#ff4949" : "#ffe6e2";
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, Math.max(.45, q.size * p.s * .8), 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.globalAlpha = 1;
+
+      const centro = projetar(0, 195, 0);
+
+      if (centro) {
+        const raio = Math.min(w * .48, 650) * centro.s;
+
+        ctx.save();
+        ctx.translate(centro.x, centro.y);
+        ctx.scale(1, .27);
+
+        const brilho = ctx.createRadialGradient(0, 0, 2, 0, 0, raio);
+        brilho.addColorStop(0, "#fff5d8");
+        brilho.addColorStop(.08, "#ffd08a");
+        brilho.addColorStop(.18, "#ed2939");
+        brilho.addColorStop(1, "rgba(220,20,40,0)");
+
+        ctx.fillStyle = brilho;
+        ctx.beginPath();
+        ctx.arc(0, 0, raio, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      const pulso = 1 + .008 * Math.sin(t * .32);
+
+      ctx.save();
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.shadowColor = "#ff2828";
+      ctx.shadowBlur = 13;
+
+      for (let i = 0; i < pontosNome.length; i++) {
+        const q = pontosNome[i];
+        const p = projetar(q.x * 350 * pulso, -205 + q.y * 320 * pulso, q.z);
+        if (!p) continue;
+
+        ctx.globalAlpha = .76 + .12 * Math.sin(t * .28 + q.f);
+        ctx.fillStyle = i % 9 === 0 ? "#fff0d0" : "#ffe6e2";
+        ctx.font = "bold " + Math.max(8, Math.min(15, 13 * p.s)) + "px Georgia";
+        ctx.fillText(NOME, p.x, p.y);
+      }
+
+      ctx.restore();
+      ctx.globalAlpha = 1;
+
+      desenharLetra(ms);
+      requestAnimationFrame(desenhar);
+    }
+
+    function easeOut(x) {
+      return 1 - Math.pow(1 - x, 3);
+    }
+
+    function desenharWarp(ms) {
+      if (warpStart === null) return;
+
+      const decorrido = ms - warpStart;
+      const progresso = Math.min(decorrido / 3800, 1);
+      const velocidade = progresso * progresso * progresso;
+      const centroX = w / 2, centroY = h * .4;
+      const raioMax = Math.hypot(w, h) * .75;
+
+      wctx.clearRect(0, 0, w, h);
+      wctx.lineCap = "round";
+
+      for (const s of estrelasWarp) {
+        const k = (s.fase + decorrido / 1000 *
+          (.25 + 1.8 * velocidade) * s.velocidade) % 1;
+        const r1 = Math.pow(k, 2.2) * raioMax;
+        const r0 = Math.pow(Math.max(0, k - (.05 + .25 * velocidade)), 2.2) * raioMax;
+        const fade = progresso > .85 ? (1 - progresso) / .15 : 1;
+
+        wctx.globalAlpha = Math.min(1, k * 3) * Math.min(1, (1-k) * 6) * fade;
+        wctx.strokeStyle = s.cor;
+        wctx.lineWidth = s.largura * (.5 + 1.5 * velocidade);
+        wctx.beginPath();
+        wctx.moveTo(centroX + Math.cos(s.a) * r0, centroY + Math.sin(s.a) * r0);
+        wctx.lineTo(centroX + Math.cos(s.a) * r1, centroY + Math.sin(s.a) * r1);
+        wctx.stroke();
+      }
+
+      if (progresso > .9) {
+        wctx.globalAlpha = (progresso - .9) * 2.4;
+        wctx.fillStyle = "#ffe0df";
+        wctx.fillRect(0, 0, w, h);
+      }
+
+      wctx.globalAlpha = 1;
+      zoom = .3 + .7 * easeOut(progresso);
+
+      if (progresso < 1) {
+        requestAnimationFrame(desenharWarp);
+      } else {
+        warpStart = null;
+        zoom = 1;
+        wctx.clearRect(0, 0, w, h);
+        warpCanvas.classList.remove("on");
+        canvas.classList.remove("blur");
+        card.classList.add("show");
+      }
+    }
+
+    function mostrarVersiculo(indice) {
+      versoAtual = (indice + VERSICULOS.length) % VERSICULOS.length;
+      const v = VERSICULOS[versoAtual];
+
+      versoEl.classList.add("trocando");
+
+      setTimeout(() => {
+        versoEl.innerHTML =
+          "<blockquote>“" + v.texto + "”</blockquote><figcaption>" +
+          v.ref + "</figcaption>";
+
+        versoEl.classList.remove("trocando");
+
+        [...dotsEl.children].forEach((d, i) =>
+          d.classList.toggle("on", i === versoAtual)
+        );
+      }, 180);
+    }
+
+    VERSICULOS.forEach((_, i) => {
+      const dot = document.createElement("button");
+      dot.type = "button";
+      dot.className = "dot";
+      dot.setAttribute("aria-label", "Versículo " + (i + 1));
+      dot.addEventListener("click", () => mostrarVersiculo(i));
+      dotsEl.append(dot);
+    });
+
+    document.getElementById("prev").addEventListener("click", () =>
+      mostrarVersiculo(versoAtual - 1)
+    );
+
+    document.getElementById("next").addEventListener("click", () =>
+      mostrarVersiculo(versoAtual + 1)
+    );
+
+    document.getElementById("entrar").addEventListener("click", () => {
+      if (warpStart !== null) return;
+
+      intro.classList.add("hide");
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
+
+      warpStart = performance.now();
+      warpCanvas.classList.add("on");
+      requestAnimationFrame(desenharWarp);
+    });
+
+    const pointers = new Map();
+    let distanciaPinch = 0;
+
+    canvas.addEventListener("pointerdown", e => {
+      canvas.setPointerCapture(e.pointerId);
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+      if (pointers.size === 1) {
+        drag = { x: e.clientX, y: e.clientY };
+      }
+
+      if (pointers.size === 2) {
+        const p = [...pointers.values()];
+        distanciaPinch = Math.hypot(p[0].x-p[1].x, p[0].y-p[1].y);
+        drag = null;
+      }
+    });
+
+    canvas.addEventListener("pointermove", e => {
+      if (!pointers.has(e.pointerId)) return;
+
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+      if (pointers.size >= 2) {
+        const p = [...pointers.values()];
+        const distancia = Math.hypot(p[0].x-p[1].x, p[0].y-p[1].y);
+
+        if (distanciaPinch) {
+          zoom = Math.max(.65, Math.min(1.9, zoom * distancia / distanciaPinch));
+        }
+
+        distanciaPinch = distancia;
+      } else if (drag) {
+        yaw += (e.clientX - drag.x) * .004;
+        pitch = Math.max(-.15, Math.min(1.05, pitch + (e.clientY - drag.y) * .004));
+        drag = { x: e.clientX, y: e.clientY };
+      }
+    });
+
+    function soltar(e) {
+      pointers.delete(e.pointerId);
+      if (pointers.size < 2) distanciaPinch = 0;
+      if (!pointers.size) drag = null;
+    }
+
+    canvas.addEventListener("pointerup", soltar);
+    canvas.addEventListener("pointercancel", soltar);
+
+    canvas.addEventListener("wheel", e => {
+      e.preventDefault();
+      zoom = Math.max(.65, Math.min(1.9, zoom * Math.exp(-e.deltaY * .001)));
+    }, { passive: false });
+
+    document.addEventListener("keydown", e => {
+      if (!card.classList.contains("show")) return;
+      if (e.key === "ArrowRight") mostrarVersiculo(versoAtual + 1);
+      if (e.key === "ArrowLeft") mostrarVersiculo(versoAtual - 1);
+    });
+
+    // Pétalas com tamanhos, trajetórias e velocidades variadas.
+    const petalasEl = document.getElementById("petalas");
+
+    for (let i = 0; i < 32; i++) {
+      const petala = document.createElement("i");
+      petala.className = "petala";
+      petala.style.setProperty("--left", Math.random() * 100 + "%");
+      petala.style.setProperty("--size", 10 + Math.random() * 18 + "px");
+      petala.style.setProperty("--duration", 9 + Math.random() * 12 + "s");
+      petala.style.setProperty("--delay", -Math.random() * 20 + "s");
+      petala.style.setProperty("--drift", (Math.random() - .5) * 210 + "px");
+      petala.style.setProperty("--spin", 300 + Math.random() * 700 + "deg");
+      petala.style.setProperty("--opacity", (.45 + Math.random() * .45).toFixed(2));
+      petala.style.setProperty("--softness", Math.random() * .7 + "px");
+      petalasEl.appendChild(petala);
+    }
+
+    const secaoAliancas = document.getElementById("aliancas");
+    const caixaMovimento = document.getElementById("caixaMovimento");
+    const tampaCaixa = document.getElementById("tampaCaixa");
+    const anelBerco = document.getElementById("anelBerco");
+    const legendaAlianca = document.getElementById("legendaAlianca");
+
+    function atualizarCenaAlianca() {
+      const rect = secaoAliancas.getBoundingClientRect();
+      const faixaAnimacao = Math.max(1, secaoAliancas.offsetHeight - innerHeight);
+      const progresso = Math.max(0, Math.min(1, -rect.top / faixaAnimacao));
+      const suave = progresso * progresso * (3 - 2 * progresso);
+
+      // Primeiro a caixa viaja; depois a tampa abre e revela o anel.
+      const viagemBruta = Math.max(0, Math.min(1, suave / .58));
+      const viagem = viagemBruta * viagemBruta * (3 - 2 * viagemBruta);
+      const aberturaBruta = Math.max(0, Math.min(1, (suave - .28) / .42));
+      const abertura = aberturaBruta * aberturaBruta * (3 - 2 * aberturaBruta);
+
+      const fimX = innerWidth < 600 ? -8 : -25;
+      const x = 43 + (fimX - 43) * viagem;
+      const y = -35 + 44 * viagem;
+      const rotacao = 12 - 20 * viagem;
+      const escala = .72 + .34 * viagem;
+
+      caixaMovimento.style.opacity = Math.max(0, Math.min(1, suave / .08));
+      caixaMovimento.style.transform =
+        `translate3d(calc(-50% + ${x}vw), calc(-50% + ${y}vh), 0) rotateZ(${rotacao}deg) scale(${escala})`;
+
+      tampaCaixa.style.transform = `rotateX(${-122 * abertura}deg)`;
+
+      const mostrarAnel = Math.max(0, Math.min(1, (abertura - .2) / .55));
+      anelBerco.style.opacity = mostrarAnel;
+      anelBerco.style.transform =
+        `translate(-50%, -50%) translateZ(22px) scale(${.72 + mostrarAnel * .38})`;
+
+      const legenda = Math.max(0, Math.min(1, (suave - .72) / .16));
+      legendaAlianca.style.opacity = legenda;
+      legendaAlianca.style.transform = `translateY(${14 - 14 * legenda}px)`;
+
+      // A cena do coração desaparece gradualmente enquanto as pétalas entram.
+      const faixaTransicao = Math.max(1, innerHeight * .42);
+      const transicao = Math.max(0, Math.min(1,
+        (faixaTransicao - rect.top) / faixaTransicao
+      ));
+      const transicaoSuave = transicao * transicao * (3 - 2 * transicao);
+
+      document.body.style.setProperty("--scene-fade", transicaoSuave.toFixed(3));
+      document.body.classList.toggle("segunda-parte", transicaoSuave > .98);
+    }
+
+    let scrollPendente = false;
+
+    window.addEventListener("scroll", () => {
+      if (scrollPendente) return;
+      scrollPendente = true;
+
+      requestAnimationFrame(() => {
+        scrollPendente = false;
+        atualizarCenaAlianca();
       });
-    }
-  } catch (erro) {
-    audioSincronizado = false;
-  }
-}
+    }, { passive: true });
 
-document.getElementById("abrir").addEventListener("click", () => {
-  if (iniciado) return;
+    window.addEventListener("resize", atualizarCenaAlianca);
+    window.addEventListener("resize", redimensionar);
 
-  carta.classList.add("aberta");
-  iniciarMusica();
-
-  setTimeout(() => {
-    carta.classList.add("escondido");
-  }, 1250);
-});
-
-document.getElementById("reiniciar").addEventListener("click", iniciarMusica);
-
-document.getElementById("fechar").addEventListener("click", () => {
-  modal.classList.add("escondido");
-});
-
-modal.addEventListener("click", event => {
-  if (event.target === modal) modal.classList.add("escondido");
-});
-
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") modal.classList.add("escondido");
-});
-
-const pointers = new Map();
-let pinchBase = 0;
-
-canvas.addEventListener("pointerdown", event => {
-  canvas.setPointerCapture(event.pointerId);
-  pointers.set(event.pointerId, {x:event.clientX, y:event.clientY});
-
-  if (pointers.size === 1) {
-    drag = {x:event.clientX, y:event.clientY};
-  }
-
-  if (pointers.size === 2) {
-    const pontos = [...pointers.values()];
-    pinchBase = Math.hypot(
-      pontos[0].x - pontos[1].x,
-      pontos[0].y - pontos[1].y
-    );
-    drag = null;
-  }
-});
-
-canvas.addEventListener("pointermove", event => {
-  if (!pointers.has(event.pointerId)) return;
-
-  pointers.set(event.pointerId, {x:event.clientX, y:event.clientY});
-
-  if (pointers.size >= 2) {
-    const pontos = [...pointers.values()];
-    const distancia = Math.hypot(
-      pontos[0].x - pontos[1].x,
-      pontos[0].y - pontos[1].y
-    );
-
-    if (pinchBase) {
-      zoom = Math.max(.65, Math.min(1.9, zoom * distancia / pinchBase));
-    }
-
-    pinchBase = distancia;
-    return;
-  }
-
-  if (drag) {
-    yaw += (event.clientX - drag.x) * .004;
-    pitch = Math.max(
-      -.15,
-      Math.min(1.05, pitch + (event.clientY - drag.y) * .004)
-    );
-    drag = {x:event.clientX, y:event.clientY};
-  }
-});
-
-function soltarPonteiro(event) {
-  pointers.delete(event.pointerId);
-  if (pointers.size < 2) pinchBase = 0;
-  if (pointers.size === 0) drag = null;
-}
-
-canvas.addEventListener("pointerup", soltarPonteiro);
-canvas.addEventListener("pointercancel", soltarPonteiro);
-
-document.getElementById("galaxia").addEventListener("wheel", event => {
-  event.preventDefault();
-  zoom = Math.max(.65, Math.min(1.9, zoom * Math.exp(-event.deltaY * .001)));
-}, {passive:false});
-
-const folha = document.getElementById("folha");
-
-carta.addEventListener("pointermove", event => {
-  const r = folha.getBoundingClientRect();
-  const x = (event.clientX - r.left) / r.width - .5;
-  const y = (event.clientY - r.top) / r.height - .5;
-
-  folha.style.transform =
-    "rotateY(" + (x * 10) + "deg) rotateX(" + (-y * 8) + "deg)";
-});
-
-carta.addEventListener("pointerleave", () => {
-  folha.style.transform = "rotateY(0) rotateX(0)";
-});
-
-window.addEventListener("resize", redimensionar);
-
-audio.addEventListener("ended", () => {
-  audioSincronizado = false;
-  relogio = audio.currentTime;
-  inicioRelogio = performance.now();
-});
-
-redimensionar();
-criarVersiculos();
-requestAnimationFrame(desenhar);
-</script>
+    atualizarCenaAlianca();
+    redimensionar();
+    mostrarVersiculo(0);
+    requestAnimationFrame(desenhar);
+  </script>
 </body>
 </html>
