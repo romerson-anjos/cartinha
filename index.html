@@ -23,15 +23,17 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html, body {
+    /* Só o html rola. Se o body também tiver overflow, ele vira um contêiner
+       de rolagem próprio e o position: sticky da cena da aliança deixa de funcionar. */
+    html {
       width: 100%;
       min-height: 100%;
       overflow-x: hidden;
-      overflow-y: auto;
       scroll-behavior: smooth;
     }
 
     body {
+      width: 100%;
       min-height: 100vh;
       color: var(--texto);
       background: radial-gradient(ellipse at 50% 38%, var(--vinho), var(--fundo) 72%);
@@ -139,7 +141,6 @@
     }
 
     .card.show {
-      opacity: 1;
       visibility: visible;
       pointer-events: auto;
       transform: translate(-50%, 0);
@@ -245,11 +246,13 @@
       z-index: 8;
       height: 320vh;
       margin-top: 100vh;
-      overflow: visible;
+      overflow: clip;
       isolation: isolate;
       background: radial-gradient(ellipse at 50% 46%, #30070b 0%, #100205 58%, #050102 100%);
     }
 
+    /* O palco fica preso na tela enquanto a seção rola. Sem overflow hidden,
+       para a caixa poder entrar por baixo sem ser cortada. */
     .aliancas-sticky {
       position: sticky;
       top: 0;
@@ -257,19 +260,8 @@
       min-height: 560px;
       display: grid;
       place-items: center;
-      overflow: hidden;
       z-index: 2;
       perspective: 1500px;
-    }
-
-    /* Ao terminar a animação, a cena permanece na tela em vez de desaparecer. */
-    #aliancas.aliancas-finalizada .aliancas-sticky {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100vh;
-      min-height: 0;
-      z-index: 9;
     }
 
     .aliancas-titulo {
@@ -324,6 +316,7 @@
       100% { transform: translate3d(var(--drift), 332vh, 0) rotate(var(--spin)); }
     }
 
+    /* Sem filter aqui: filter achata o 3D e a tampa perderia a profundidade. */
     .caixa-movimento {
       position: absolute;
       z-index: 3;
@@ -333,8 +326,8 @@
       height: min(280px, 60vw);
       transform-style: preserve-3d;
       transform: translate3d(-50%, -50%, 0);
-      will-change: transform;
-      filter: drop-shadow(0 28px 34px #000b) drop-shadow(0 0 34px #8d101a44);
+      will-change: transform, opacity;
+      opacity: 0;
     }
 
     .caixa-3d {
@@ -354,7 +347,7 @@
       border: 1px solid #b99868;
       border-radius: 12px 12px 20px 20px;
       background: linear-gradient(145deg, #171513, #050505 65%, #211c16);
-      box-shadow: inset 0 8px 14px #000, inset 0 0 0 5px #ffffff08;
+      box-shadow: inset 0 8px 14px #000, inset 0 0 0 5px #ffffff08, 0 28px 34px #000b;
       transform: translateZ(4px);
     }
 
@@ -474,7 +467,7 @@
       pointer-events: none;
     }
 
-    /* Dissolve a primeira cena enquanto as pétalas entram. */
+    /* Dissolve a primeira cena conforme a segunda entra. */
     #galaxy {
       opacity: calc(1 - var(--scene-fade, 0));
       transition: opacity .12s linear, filter 1.5s ease;
@@ -1046,7 +1039,7 @@
       if (e.key === "ArrowLeft") mostrarVersiculo(versoAtual - 1);
     });
 
-    // Mais pétalas, distribuídas por toda a cena.
+    // Pétalas distribuídas por toda a seção.
     const petalasEl = document.getElementById("petalas");
 
     for (let i = 0; i < 100; i++) {
@@ -1069,55 +1062,45 @@
     const anelBerco = document.getElementById("anelBerco");
     const legendaAlianca = document.getElementById("legendaAlianca");
 
+    const clamp01 = v => Math.max(0, Math.min(1, v));
+    const suavizar = t => t * t * (3 - 2 * t);
+    // Fração de uma fase do scroll, com curva suave (0 → 1).
+    const fase = (p, inicio, fim) => suavizar(clamp01((p - inicio) / (fim - inicio)));
+
+    /*
+      Uma única linha do tempo para a seção inteira:
+      p = 0 quando a seção acabou de entrar por baixo da tela (já no primeiro scroll)
+      p = 1 quando ela já saiu por cima.
+      Assim nada fica "parado" esperando, e cada etapa acontece no scroll certo.
+    */
     function atualizarCenaAlianca() {
       const rect = secaoAliancas.getBoundingClientRect();
-      const faixaAnimacao = Math.max(1, secaoAliancas.offsetHeight - innerHeight);
-      const progresso = Math.max(0, Math.min(1, -rect.top / faixaAnimacao));
+      const p = clamp01((innerHeight - rect.top) / secaoAliancas.offsetHeight);
 
-      // Curva suave, sem mudanças bruscas de velocidade.
-      const suave = progresso * progresso * (3 - 2 * progresso);
+      const dissolver = fase(p, 0, .2);     // a galáxia some
+      const subida    = fase(p, .02, .42);  // a caixa sobe e centraliza
+      const abertura  = fase(p, .5, .8);    // a tampa abre (palco já fixo)
+      const anel      = fase(p, .62, .9);   // o anel aparece
+      const legenda   = fase(p, .86, .99);  // a frase final
 
-      // A caixa chega ao centro logo no começo da segunda cena.
-      const viagemBruta = Math.max(0, Math.min(1, suave / .22));
-      const viagem = viagemBruta * viagemBruta * (3 - 2 * viagemBruta);
+      const y = 62 * (1 - subida);
+      const escala = .9 + .1 * subida;
 
-      // A tampa abre perto do final da rolagem.
-      const aberturaBruta = Math.max(0, Math.min(1, (suave - .72) / .20));
-      const abertura = aberturaBruta * aberturaBruta * (3 - 2 * aberturaBruta);
-
-      const x = 40 * (1 - viagem);
-      const y = 80 * (1 - viagem);
-      const escala = .9 + .12 * viagem;
-
-      caixaMovimento.style.opacity = "1";
+      caixaMovimento.style.opacity = clamp01(subida * 2.5).toFixed(3);
       caixaMovimento.style.transform =
-        `translate3d(calc(-50% + ${x}vw), calc(-50% + ${y}vh), 0) scale(${escala})`;
+        `translate3d(-50%, calc(-50% + ${y.toFixed(2)}vh), 0) scale(${escala.toFixed(3)})`;
 
-      tampaCaixa.style.transform = `rotateX(${-190 * abertura}deg)`;
+      tampaCaixa.style.transform = `rotateX(${(-165 * abertura).toFixed(2)}deg)`;
 
-      // O anel sobe para a frente da base para continuar visível com a tampa aberta.
-      const mostrarAnel = Math.max(0, Math.min(1, (abertura - .12) / .56));
-      anelBerco.style.opacity = mostrarAnel;
+      anelBerco.style.opacity = anel.toFixed(3);
       anelBerco.style.transform =
-        `translate(-50%, -50%) translateZ(32px) scale(${.74 + mostrarAnel * .24})`;
+        `translate(-50%, -50%) translateZ(32px) scale(${(.74 + .24 * anel).toFixed(3)})`;
 
-      const legenda = Math.max(0, Math.min(1, (suave - .84) / .08));
-      legendaAlianca.style.opacity = legenda;
-      legendaAlianca.style.transform = `translateY(${14 - 14 * legenda}px)`;
+      legendaAlianca.style.opacity = legenda.toFixed(3);
+      legendaAlianca.style.transform = `translateY(${(14 - 14 * legenda).toFixed(2)}px)`;
 
-      // A primeira cena se dissolve enquanto a segunda entra.
-      const faixaTransicao = Math.max(1, innerHeight * .55);
-      const transicao = Math.max(
-        0,
-        Math.min(1, (faixaTransicao - rect.top) / faixaTransicao)
-      );
-      const transicaoSuave = transicao * transicao * (3 - 2 * transicao);
-
-      document.body.style.setProperty("--scene-fade", transicaoSuave.toFixed(3));
-      document.body.classList.toggle("segunda-parte", transicaoSuave > .98);
-
-      // Ao voltar a rolar para cima, a cena volta ao comportamento normal.
-      secaoAliancas.classList.toggle("aliancas-finalizada", progresso >= .999);
+      document.body.style.setProperty("--scene-fade", dissolver.toFixed(3));
+      document.body.classList.toggle("segunda-parte", dissolver > .98);
     }
 
     let scrollPendente = false;
