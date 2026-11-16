@@ -245,7 +245,7 @@
       z-index: 8;
       height: 320vh;
       margin-top: 100vh;
-      overflow: clip;
+      overflow: visible;
       isolation: isolate;
       background: radial-gradient(ellipse at 50% 46%, #30070b 0%, #100205 58%, #050102 100%);
     }
@@ -258,13 +258,24 @@
       display: grid;
       place-items: center;
       overflow: hidden;
-      perspective: 1200px;
+      z-index: 2;
+      perspective: 1500px;
+    }
+
+    /* Ao terminar a animação, a cena permanece na tela em vez de desaparecer. */
+    #aliancas.aliancas-finalizada .aliancas-sticky {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100vh;
+      min-height: 0;
+      z-index: 9;
     }
 
     .aliancas-titulo {
       position: absolute;
       z-index: 2;
-      top: clamp(38px, 9vh, 90px);
+      top: clamp(100px, 40vh, 180px);
       width: 100%;
       padding: 0 20px;
       text-align: center;
@@ -288,6 +299,7 @@
       position: absolute;
       inset: 0;
       z-index: 1;
+      height: 100%;
       overflow: hidden;
       pointer-events: none;
     }
@@ -309,7 +321,7 @@
 
     @keyframes cair-petala {
       0% { transform: translate3d(0, -12vh, 0) rotate(0); }
-      100% { transform: translate3d(var(--drift), 112vh, 0) rotate(var(--spin)); }
+      100% { transform: translate3d(var(--drift), 332vh, 0) rotate(var(--spin)); }
     }
 
     .caixa-movimento {
@@ -317,8 +329,8 @@
       z-index: 3;
       left: 50%;
       top: 53%;
-      width: min(520px, 78vw);
-      height: min(480px, 74vw);
+      width: min(300px, 60vw);
+      height: min(280px, 60vw);
       transform-style: preserve-3d;
       transform: translate3d(-50%, -50%, 0);
       will-change: transform;
@@ -330,7 +342,7 @@
       width: 100%;
       height: 100%;
       transform-style: preserve-3d;
-      transform: rotateX(12deg) rotateY(-10deg) rotateZ(-8deg);
+      transform: rotateX(8deg) rotateY(-2deg);
     }
 
     .interior-caixa {
@@ -383,8 +395,8 @@
       z-index: 5;
       left: 9%;
       right: 9%;
-      top: 6%;
-      height: 38%;
+      top: 4%;
+      height: 42%;
       border: 1px solid #8b704b;
       border-radius: 14px 14px 8px 8px;
       background: linear-gradient(145deg, #242220, #090909 58%, #171512);
@@ -421,11 +433,11 @@
 
     .anel-berco {
       position: absolute;
-      z-index: 8;
+      z-index: 12;
       left: 50%;
-      top: 47%;
-      width: 62%;
-      transform: translate(-50%, -50%) translateZ(16px) scale(.68);
+      top: 58%;
+      width: 56%;
+      transform: translate(-50%, -50%) translateZ(32px) scale(.74);
       opacity: 0;
       filter: drop-shadow(0 0 18px #d9a94b88);
       will-change: transform, opacity;
@@ -498,8 +510,8 @@
       .aliancas-sticky { min-height: 520px; }
 
       .caixa-movimento {
-        width: min(380px, 84vw);
-        height: min(360px, 82vw);
+        width: min(290px, 72vw);
+        height: min(265px, 60vw);
       }
 
       .aliancas-titulo { top: 10vh; }
@@ -507,7 +519,9 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
+      *,
+      *::before,
+      *::after {
         animation-duration: .01ms !important;
         transition-duration: .01ms !important;
       }
@@ -541,9 +555,9 @@
   </section>
 
   <section id="aliancas" aria-label="Uma surpresa especial">
-    <div class="aliancas-sticky">
-      <div class="petalas" id="petalas" aria-hidden="true"></div>
+    <div class="petalas" id="petalas" aria-hidden="true"></div>
 
+    <div class="aliancas-sticky">
       <header class="aliancas-titulo">
         <h2>Nosso próximo capítulo</h2>
         <p>Uma promessa para guardar pertinho do coração…</p>
@@ -611,7 +625,7 @@
   </section>
 
   <script>
-    const NOME = "Prints";
+    const NOME = "Aline";
     const AJUSTE_LETRA = 0;
 
     const VERSICULOS = [
@@ -1032,16 +1046,16 @@
       if (e.key === "ArrowLeft") mostrarVersiculo(versoAtual - 1);
     });
 
-    // Pétalas com tamanhos, trajetórias e velocidades variadas.
+    // Mais pétalas, distribuídas por toda a cena.
     const petalasEl = document.getElementById("petalas");
 
-    for (let i = 0; i < 32; i++) {
+    for (let i = 0; i < 100; i++) {
       const petala = document.createElement("i");
       petala.className = "petala";
       petala.style.setProperty("--left", Math.random() * 100 + "%");
       petala.style.setProperty("--size", 10 + Math.random() * 18 + "px");
-      petala.style.setProperty("--duration", 9 + Math.random() * 12 + "s");
-      petala.style.setProperty("--delay", -Math.random() * 20 + "s");
+      petala.style.setProperty("--duration", 28 + Math.random() * 12 + "s");
+      petala.style.setProperty("--delay", -Math.random() * 40 + "s");
       petala.style.setProperty("--drift", (Math.random() - .5) * 210 + "px");
       petala.style.setProperty("--spin", 300 + Math.random() * 700 + "deg");
       petala.style.setProperty("--opacity", (.45 + Math.random() * .45).toFixed(2));
@@ -1059,44 +1073,51 @@
       const rect = secaoAliancas.getBoundingClientRect();
       const faixaAnimacao = Math.max(1, secaoAliancas.offsetHeight - innerHeight);
       const progresso = Math.max(0, Math.min(1, -rect.top / faixaAnimacao));
+
+      // Curva suave, sem mudanças bruscas de velocidade.
       const suave = progresso * progresso * (3 - 2 * progresso);
 
-      // Primeiro a caixa viaja; depois a tampa abre e revela o anel.
-      const viagemBruta = Math.max(0, Math.min(1, suave / .58));
+      // A caixa chega ao centro logo no começo da segunda cena.
+      const viagemBruta = Math.max(0, Math.min(1, suave / .22));
       const viagem = viagemBruta * viagemBruta * (3 - 2 * viagemBruta);
-      const aberturaBruta = Math.max(0, Math.min(1, (suave - .28) / .42));
+
+      // A tampa abre perto do final da rolagem.
+      const aberturaBruta = Math.max(0, Math.min(1, (suave - .72) / .20));
       const abertura = aberturaBruta * aberturaBruta * (3 - 2 * aberturaBruta);
 
-      const fimX = innerWidth < 600 ? -8 : -25;
-      const x = 43 + (fimX - 43) * viagem;
-      const y = -35 + 44 * viagem;
-      const rotacao = 12 - 20 * viagem;
-      const escala = .72 + .34 * viagem;
+      const x = 40 * (1 - viagem);
+      const y = 80 * (1 - viagem);
+      const escala = .9 + .12 * viagem;
 
-      caixaMovimento.style.opacity = Math.max(0, Math.min(1, suave / .08));
+      caixaMovimento.style.opacity = "1";
       caixaMovimento.style.transform =
-        `translate3d(calc(-50% + ${x}vw), calc(-50% + ${y}vh), 0) rotateZ(${rotacao}deg) scale(${escala})`;
+        `translate3d(calc(-50% + ${x}vw), calc(-50% + ${y}vh), 0) scale(${escala})`;
 
-      tampaCaixa.style.transform = `rotateX(${-122 * abertura}deg)`;
+      tampaCaixa.style.transform = `rotateX(${-190 * abertura}deg)`;
 
-      const mostrarAnel = Math.max(0, Math.min(1, (abertura - .2) / .55));
+      // O anel sobe para a frente da base para continuar visível com a tampa aberta.
+      const mostrarAnel = Math.max(0, Math.min(1, (abertura - .12) / .56));
       anelBerco.style.opacity = mostrarAnel;
       anelBerco.style.transform =
-        `translate(-50%, -50%) translateZ(22px) scale(${.72 + mostrarAnel * .38})`;
+        `translate(-50%, -50%) translateZ(32px) scale(${.74 + mostrarAnel * .24})`;
 
-      const legenda = Math.max(0, Math.min(1, (suave - .72) / .16));
+      const legenda = Math.max(0, Math.min(1, (suave - .84) / .08));
       legendaAlianca.style.opacity = legenda;
       legendaAlianca.style.transform = `translateY(${14 - 14 * legenda}px)`;
 
-      // A cena do coração desaparece gradualmente enquanto as pétalas entram.
-      const faixaTransicao = Math.max(1, innerHeight * .42);
-      const transicao = Math.max(0, Math.min(1,
-        (faixaTransicao - rect.top) / faixaTransicao
-      ));
+      // A primeira cena se dissolve enquanto a segunda entra.
+      const faixaTransicao = Math.max(1, innerHeight * .55);
+      const transicao = Math.max(
+        0,
+        Math.min(1, (faixaTransicao - rect.top) / faixaTransicao)
+      );
       const transicaoSuave = transicao * transicao * (3 - 2 * transicao);
 
       document.body.style.setProperty("--scene-fade", transicaoSuave.toFixed(3));
       document.body.classList.toggle("segunda-parte", transicaoSuave > .98);
+
+      // Ao voltar a rolar para cima, a cena volta ao comportamento normal.
+      secaoAliancas.classList.toggle("aliancas-finalizada", progresso >= .999);
     }
 
     let scrollPendente = false;
