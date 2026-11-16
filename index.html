@@ -23,8 +23,6 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* Só o html rola. Se o body também tiver overflow, ele vira um contêiner
-       de rolagem próprio e o position: sticky da cena da aliança deixa de funcionar. */
     html {
       width: 100%;
       min-height: 100%;
@@ -240,7 +238,6 @@
       50% { transform: translateY(4px); }
     }
 
-    /* Segunda cena: pétalas e caixa de aliança */
     #aliancas {
       position: relative;
       z-index: 8;
@@ -251,8 +248,6 @@
       background: radial-gradient(ellipse at 50% 46%, #30070b 0%, #100205 58%, #050102 100%);
     }
 
-    /* O palco fica preso na tela enquanto a seção rola. Sem overflow hidden,
-       para a caixa poder entrar por baixo sem ser cortada. */
     .aliancas-sticky {
       position: sticky;
       top: 0;
@@ -316,7 +311,6 @@
       100% { transform: translate3d(var(--drift), 332vh, 0) rotate(var(--spin)); }
     }
 
-    /* Sem filter aqui: filter achata o 3D e a tampa perderia a profundidade. */
     .caixa-movimento {
       position: absolute;
       z-index: 3;
@@ -467,7 +461,6 @@
       pointer-events: none;
     }
 
-    /* Dissolve a primeira cena conforme a segunda entra. */
     #galaxy {
       opacity: calc(1 - var(--scene-fade, 0));
       transition: opacity .12s linear, filter 1.5s ease;
@@ -488,6 +481,372 @@
       transition: opacity .12s linear,
                   transform 1s cubic-bezier(.2,.75,.2,1),
                   visibility 1s;
+    }
+
+    #arvoreAmor {
+      position: relative;
+      z-index: 8;
+      height: 230vh;
+      overflow: clip;
+      isolation: isolate;
+      background: radial-gradient(ellipse at 50% 58%, #35080e 0%, #160307 54%, #060102 100%);
+    }
+
+    .arvore-palco {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      min-height: 560px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .arvore-palco::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 15% 8% 0;
+      background: radial-gradient(ellipse at 50% 75%, #d9253d24, transparent 62%);
+      filter: blur(16px);
+    }
+
+    .arvore-titulo {
+      position: absolute;
+      z-index: 4;
+      top: clamp(28px, 6vh, 72px);
+      width: min(92%, 760px);
+      text-align: center;
+      text-shadow: 0 0 24px #e32a4544;
+    }
+
+    .arvore-titulo h2 {
+      color: #fff0ed;
+      font: 400 clamp(2.5rem, 7vw, 5rem)/1.02 "Great Vibes", cursive;
+    }
+
+    .arvore-titulo p {
+      margin-top: 10px;
+      color: #e7b9b4;
+      font-size: clamp(.98rem, 2.6vw, 1.25rem);
+      font-style: italic;
+    }
+
+    .arvore-arte {
+      position: absolute;
+      z-index: 2;
+      left: 50%;
+      top: 52%;
+      width: min(92vw, 760px);
+      height: min(76vh, 820px);
+      object-fit: contain;
+      overflow: visible;
+      transform: translate(-50%, -50%);
+      clip-path: inset(0 0 100% 0);
+      filter: drop-shadow(0 0 18px #f2363630);
+      will-change: clip-path, filter, rotate;
+    }
+
+    #arvoreAmor.floresceu .arvore-arte {
+      filter: drop-shadow(0 0 28px #f2363666);
+    }
+
+    .chao-magico {
+      position: absolute;
+      z-index: 2;
+      left: 50%;
+      bottom: 7%;
+      width: min(760px, 90vw);
+      height: 14%;
+      border-top: 1px solid #ffd0a055;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at 50% 0%, #ff534225, transparent 70%);
+      transform: translateX(-50%);
+      filter: blur(2px);
+    }
+
+    .controle-arvore {
+      position: absolute;
+      z-index: 5;
+      left: 50%;
+      bottom: max(30px, env(safe-area-inset-bottom));
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+      width: min(92%, 520px);
+      transform: translateX(-50%);
+      text-align: center;
+    }
+
+    .botao-amor {
+      border: 1px solid #ffd0a0a0;
+      border-radius: 999px;
+      padding: .86em 1.55em;
+      color: #fff8f0;
+      background: linear-gradient(135deg, #e33248, #8f1025);
+      box-shadow: 0 0 28px #eb405266, inset 0 1px #fff6;
+      font: 600 1rem Arial, sans-serif;
+      letter-spacing: .03em;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .botao-amor:hover {
+      transform: translateY(-2px) scale(1.025);
+      box-shadow: 0 0 38px #eb405288;
+    }
+
+    .arvore-ajuda {
+      color: #f3d7ce;
+      font-size: .96rem;
+      text-shadow: 0 1px 8px #000;
+    }
+
+    .frase-caida {
+      display: inline-grid;
+      justify-items: center;
+      gap: 2px;
+      position: absolute;
+      z-index: 4;
+      top: 35%;
+      left: 50%;
+      width: max-content;
+      max-width: min(86vw, 420px);
+      padding: .55em .9em;
+      border: 1px solid #ffd0a066;
+      border-radius: 999px;
+      color: #fff4de;
+      background: #2a080bd9;
+      box-shadow: 0 0 22px #ff4a4a66, 0 8px 22px #0008;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      text-align: center;
+      text-shadow: 0 0 10px #ffd0a0;
+      pointer-events: none;
+      animation: frase-queda 1.65s cubic-bezier(.25,.65,.3,1) forwards;
+    }
+
+    .frase-caida small {
+      color: #ffd0a0;
+      font: .65rem Arial, sans-serif;
+      letter-spacing: .08em;
+      opacity: .85;
+      text-transform: uppercase;
+    }
+
+    @keyframes frase-queda {
+      0% { opacity: 0; transform: translate(-50%, -10px) scale(.65) rotate(-8deg); }
+      12% { opacity: 1; transform: translate(-50%, 0) scale(1.08) rotate(3deg); }
+      72% { opacity: 1; transform: translate(calc(-50% + var(--drift)), 34vh) scale(.95) rotate(var(--tilt)); }
+      88% { transform: translate(calc(-50% + var(--drift)), 31vh) scale(1.03) rotate(var(--tilt)); }
+      100% { opacity: 1; transform: translate(calc(-50% + var(--drift)), 34vh) scale(.93) rotate(var(--tilt)); }
+    }
+
+    .onda-amor {
+      animation: sacudir-arvore .8s ease-in-out;
+      transform-origin: 50% 88%;
+    }
+
+    @keyframes sacudir-arvore {
+      0%, 100% { rotate: 0deg; }
+      15% { rotate: -2.3deg; }
+      32% { rotate: 2.5deg; }
+      48% { rotate: -1.8deg; }
+      65% { rotate: 1.4deg; }
+      82% { rotate: -.7deg; }
+    }
+
+    @media (max-width: 600px) {
+      #arvoreAmor { height: 205vh; }
+      .arvore-palco { min-height: 520px; }
+      .arvore-titulo { top: 5vh; }
+      .arvore-arte { top: 49%; width: 96vw; height: 64vh; }
+      .controle-arvore { bottom: max(22px, env(safe-area-inset-bottom)); }
+      .arvore-ajuda { max-width: 90%; font-size: .86rem; }
+    }
+
+    .frase-caida small {
+      color: #ffd0a0;
+      font: .65rem Arial, sans-serif;
+      letter-spacing: .08em;
+      opacity: .85;
+      text-transform: uppercase;
+    }
+
+    @keyframes frase-queda {
+      0% { opacity: 0; transform: translate(-50%, -10px) scale(.65) rotate(-8deg); }
+      12% { opacity: 1; transform: translate(-50%, 0) scale(1.08) rotate(3deg); }
+      72% { opacity: 1; transform: translate(calc(-50% + var(--drift)), 34vh) scale(.95) rotate(var(--tilt)); }
+      88% { transform: translate(calc(-50% + var(--drift)), 31vh) scale(1.03) rotate(var(--tilt)); }
+      100% { opacity: 1; transform: translate(calc(-50% + var(--drift)), 34vh) scale(.93) rotate(var(--tilt)); }
+    }
+
+    .onda-amor {
+      animation: sacudir-arvore .8s ease-in-out;
+      transform-origin: 50% 88%;
+    }
+
+    @keyframes sacudir-arvore {
+      0%, 100% { rotate: 0deg; }
+      15% { rotate: -2.3deg; }
+      32% { rotate: 2.5deg; }
+      48% { rotate: -1.8deg; }
+      65% { rotate: 1.4deg; }
+      82% { rotate: -.7deg; }
+    }
+
+    @media (max-width: 600px) {
+      #arvoreAmor { height: 205vh; }
+      .arvore-palco { min-height: 520px; }
+      .arvore-titulo { top: 5vh; }
+      .arvore-arte { top: 49%; width: 96vw; height: 64vh; }
+      .controle-arvore { bottom: max(22px, env(safe-area-inset-bottom)); }
+      .arvore-ajuda { max-width: 90%; font-size: .86rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .frase-caida { animation-duration: .01ms !important; }
+    }
+
+    /* Última cena: a pergunta e o para sempre. */
+    #finalJuntos {
+      position: relative;
+      z-index: 9;
+      min-height: 100vh;
+      height: 100vh;
+      overflow: hidden;
+      isolation: isolate;
+      display: grid;
+      place-items: center;
+      padding: 28px 18px;
+      text-align: center;
+      background: radial-gradient(ellipse at 50% 45%, #3a0911 0%, #160307 58%, #060102 100%);
+    }
+
+    #petalasFinal { z-index: 1; }
+
+    .final-palco {
+      position: relative;
+      z-index: 2;
+      width: min(100%, 760px);
+      padding: clamp(24px, 6vw, 56px);
+      border: 1px solid #ff777133;
+      border-radius: 30px;
+      background: linear-gradient(145deg, #25070bd9, #130306d9);
+      box-shadow: 0 0 70px #c0183024, inset 0 1px #fff2;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .final-palco h2 {
+      color: #fff0ed;
+      font: 400 clamp(2.8rem, 8vw, 5.4rem)/1.06 "Great Vibes", cursive;
+      text-shadow: 0 0 26px #f2363655;
+    }
+
+    .final-palco > p {
+      max-width: 570px;
+      margin: 18px auto 0;
+      color: #f0d0cb;
+      font-size: clamp(1.05rem, 3vw, 1.35rem);
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    .arena-botoes {
+      position: relative;
+      width: min(100%, 540px);
+      height: 108px;
+      margin: 30px auto 0;
+    }
+
+    .resposta-final {
+      position: absolute;
+      top: 26px;
+      min-width: 126px;
+      padding: .82em 1.35em;
+      border: 1px solid #ffd0a099;
+      border-radius: 999px;
+      font: 600 1rem Arial, sans-serif;
+      letter-spacing: .03em;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    #aceito {
+      left: calc(50% - 145px);
+      color: #fff8f0;
+      background: linear-gradient(135deg, #f23636, #a8071a);
+      box-shadow: 0 0 28px #eb405266;
+    }
+
+    #aceito:hover {
+      transform: translateY(-3px) scale(1.04);
+      box-shadow: 0 0 40px #eb405299;
+    }
+
+    #desculpa {
+      left: calc(50% + 18px);
+      color: #f8d9d3;
+      background: #351017;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .mensagem-final {
+      max-width: 650px;
+      margin: 20px auto 0;
+      color: #fff3e7;
+      font: 400 clamp(1.5rem, 4vw, 2.25rem)/1.35 "Cormorant Garamond", Georgia, serif;
+      text-shadow: 0 0 24px #ff596a88;
+      opacity: 0;
+      transform: translateY(18px) scale(.96);
+      transition: opacity 1.2s ease, transform 1.2s cubic-bezier(.16,1,.3,1);
+    }
+
+    .mensagem-final.mostrar { opacity: 1; transform: translateY(0) scale(1); }
+
+    #finalJuntos.accepted .arena-botoes,
+    #finalJuntos.accepted .final-palco > p:not(.mensagem-final) {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .6s ease;
+    }
+
+    #cachoeiraPetalas {
+      position: fixed;
+      z-index: 50;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .petala-festiva {
+      position: absolute;
+      top: -14vh;
+      left: var(--x);
+      width: var(--tamanho);
+      height: calc(var(--tamanho) * .66);
+      border-radius: 80% 8% 76% 12%;
+      background: radial-gradient(ellipse at 28% 25%, var(--cor-clara), var(--cor-petala) 55%, var(--cor-escura));
+      box-shadow: inset 1px 1px 4px #fff5, 0 2px 15px var(--brilho);
+      opacity: 0;
+      animation: cachoeira-petalas var(--duracao) var(--atraso) cubic-bezier(.2,.55,.35,1) forwards;
+      will-change: transform, opacity;
+    }
+
+    @keyframes cachoeira-petalas {
+      0% { opacity: 0; transform: translate3d(0, -12vh, 0) rotate(0) scale(.55); }
+      10% { opacity: .98; }
+      82% { opacity: .95; }
+      100% { opacity: 0; transform: translate3d(var(--deriva), 118vh, 0) rotate(var(--giro)) scale(1.12); }
+    }
+
+    @media (max-width: 600px) {
+      .final-palco { padding: 30px 18px; border-radius: 24px; }
+      .arena-botoes { width: min(100%, 360px); height: 120px; margin-top: 24px; }
+      .resposta-final { min-width: 112px; padding: .8em 1em; }
+      #aceito { left: calc(50% - 128px); }
+      #desculpa { left: calc(50% + 14px); }
     }
 
     body.segunda-parte #galaxy,
@@ -525,7 +884,6 @@
 <body>
   <canvas id="galaxy" class="blur" aria-hidden="true"></canvas>
   <canvas id="warp" aria-hidden="true"></canvas>
-
   <audio id="musica" preload="auto" src="musical.mp3"></audio>
 
   <section class="intro" id="intro">
@@ -549,7 +907,6 @@
 
   <section id="aliancas" aria-label="Uma surpresa especial">
     <div class="petalas" id="petalas" aria-hidden="true"></div>
-
     <div class="aliancas-sticky">
       <header class="aliancas-titulo">
         <h2>Nosso próximo capítulo</h2>
@@ -558,10 +915,7 @@
 
       <div class="caixa-movimento" id="caixaMovimento">
         <div class="caixa-3d">
-          <div class="interior-caixa">
-            <div class="forro"></div>
-          </div>
-
+          <div class="interior-caixa"><div class="forro"></div></div>
           <div class="anel-berco" id="anelBerco" aria-hidden="true">
             <svg viewBox="0 0 260 190">
               <defs>
@@ -573,47 +927,63 @@
                   <stop offset=".78" stop-color="#fff2b0"/>
                   <stop offset="1" stop-color="#8c570e"/>
                 </linearGradient>
-
                 <linearGradient id="pedra" x1="0" y1="0" x2="1" y2="1">
                   <stop stop-color="#fff"/>
                   <stop offset=".38" stop-color="#e8f1ff"/>
                   <stop offset=".7" stop-color="#aebbd0"/>
                   <stop offset="1" stop-color="#fff"/>
                 </linearGradient>
-
                 <radialGradient id="reflexo">
                   <stop stop-color="#fff" stop-opacity=".9"/>
                   <stop offset="1" stop-color="#fff" stop-opacity="0"/>
                 </radialGradient>
               </defs>
-
-              <ellipse cx="130" cy="131" rx="68" ry="29"
-                fill="none" stroke="#5f390b" stroke-width="22" opacity=".65"/>
-              <ellipse cx="130" cy="123" rx="68" ry="29"
-                fill="none" stroke="url(#ouro)" stroke-width="17"/>
-              <path d="M66 121c14 17 31 25 64 27 31-1 51-10 65-27"
-                fill="none" stroke="#fff0a3" stroke-width="2.5" opacity=".85"/>
-              <path d="M111 94 119 78h22l8 16-19 24z"
-                fill="url(#ouro)" stroke="#ffe9a0" stroke-width="2"/>
-              <path d="M117 77 130 50l14 27-14 17z"
-                fill="url(#pedra)" stroke="#fff" stroke-width="2"/>
-              <path d="m130 50 1 44 13-17zM117 77h27"
-                fill="none" stroke="#aab8ca" stroke-width="1.5"/>
+              <ellipse cx="130" cy="131" rx="68" ry="29" fill="none" stroke="#5f390b" stroke-width="22" opacity=".65"/>
+              <ellipse cx="130" cy="123" rx="68" ry="29" fill="none" stroke="url(#ouro)" stroke-width="17"/>
+              <path d="M66 121c14 17 31 25 64 27 31-1 51-10 65-27" fill="none" stroke="#fff0a3" stroke-width="2.5" opacity=".85"/>
+              <path d="M111 94 119 78h22l8 16-19 24z" fill="url(#ouro)" stroke="#ffe9a0" stroke-width="2"/>
+              <path d="M117 77 130 50l14 27-14 17z" fill="url(#pedra)" stroke="#fff" stroke-width="2"/>
+              <path d="m130 50 1 44 13-17zM117 77h27" fill="none" stroke="#aab8ca" stroke-width="1.5"/>
               <circle class="brilho-joia" cx="128" cy="61" r="22" fill="url(#reflexo)"/>
-              <path d="M128 39v-15m-9 23-11-10m29 10 11-10"
-                stroke="#fff5cf" stroke-width="2" stroke-linecap="round" opacity=".8"/>
+              <path d="M128 39v-15m-9 23-11-10m29 10 11-10" stroke="#fff5cf" stroke-width="2" stroke-linecap="round" opacity=".8"/>
             </svg>
           </div>
-
           <div class="base-frente"></div>
           <div class="filete-caixa"></div>
           <div class="tampa-3d" id="tampaCaixa"></div>
         </div>
       </div>
+      <p class="legenda-alianca" id="legendaAlianca">E se a nossa próxima promessa fosse para sempre?</p>
+    </div>
+  </section>
 
-      <p class="legenda-alianca" id="legendaAlianca">
-        E se a nossa próxima promessa fosse para sempre?
-      </p>
+  <section id="arvoreAmor" aria-label="A árvore do nosso amor">
+    <div class="petalas" id="petalasArvore" aria-hidden="true"></div>
+    <div class="arvore-palco">
+      <header class="arvore-titulo">
+        <h2>O amor cria raízes no universo</h2>
+        <p>Role devagar… cada passo faz a vida florescer.</p>
+      </header>
+      <img class="arvore-arte" id="arteArvore" src="arvore-referencia-transparente.png" alt="Árvore com copa arredondada de folhas escuras e pequenos corações vermelhos, tronco largo e raízes ramificadas">
+      <div class="chao-magico" aria-hidden="true"></div>
+      <div class="chuva-frases" id="chuvaFrases" aria-live="polite" aria-atomic="false"></div>
+      <div class="controle-arvore">
+        <button class="botao-amor" id="botaoAmor" type="button">♥ A árvore tem algo a dizer </button>
+        <p class="arvore-ajuda" id="arvoreAjuda">Cada toque faz a árvore estremecer e deixa uma frase cair.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="finalJuntos" aria-labelledby="tituloFinal">
+    <div class="petalas" id="petalasFinal" aria-hidden="true"></div>
+    <div class="final-palco">
+      <h2 id="tituloFinal">E se a gente escolhesse o para sempre?</h2>
+      <p>Quero dividir os dias simples, os sonhos enormes e todos os amanhãs com você. Quer viver uma vida inteira comigo?</p>
+      <div class="arena-botoes" id="arenaBotoes">
+        <button class="resposta-final" id="aceito" type="button">Aceito ♥</button>
+        <button class="resposta-final" id="desculpa" type="button">Desculpa</button>
+      </div>
+      <p class="mensagem-final" id="mensagemFinal" aria-live="polite">Então vamos escrever nosso para sempre, um dia lindo de cada vez.</p>
     </div>
   </section>
 
@@ -696,7 +1066,6 @@
     const poeira = Array.from({ length: 2200 }, () => {
       const a = Math.random() * Math.PI * 2;
       const r = Math.sqrt(Math.random()) * 1350;
-
       return {
         x: Math.cos(a) * r,
         y: 195 + (Math.random() - .5) * 30,
@@ -718,7 +1087,6 @@
         const x = 16 * Math.pow(Math.sin(a), 3) / 18;
         const y = -(13 * Math.cos(a) - 5 * Math.cos(2*a) -
           2 * Math.cos(3*a) - Math.cos(4*a)) / 18;
-
         pontosNome.push({
           x: x * camada.raio,
           y: y * camada.raio,
@@ -745,7 +1113,6 @@
       const yr = y * cp - zr * sp;
       const zp = y * sp + zr * cp;
       const dist = camera - zp;
-
       if (dist < 120) return null;
 
       const s = Math.min(w, h) * 1.2 * zoom / dist;
@@ -755,14 +1122,12 @@
     function redimensionar() {
       w = innerWidth;
       h = innerHeight;
-
       for (const c of [canvas, warpCanvas]) {
         c.width = w * reducaoDpr;
         c.height = h * reducaoDpr;
         c.style.width = w + "px";
         c.style.height = h + "px";
       }
-
       ctx.setTransform(reducaoDpr, 0, 0, reducaoDpr, 0, 0);
       wctx.setTransform(reducaoDpr, 0, 0, reducaoDpr, 0, 0);
     }
@@ -786,7 +1151,6 @@
       if (!p) return;
 
       const alfa = Math.min(1, (ms - trocaLetra) / 220);
-
       ctx.save();
       ctx.globalAlpha = alfa;
       ctx.textAlign = "center";
@@ -819,7 +1183,6 @@
         const x = Math.cos(a) * q.x + Math.sin(a) * q.z;
         const z = -Math.sin(a) * q.x + Math.cos(a) * q.z;
         const p = projetar(x, q.y, z);
-
         if (!p || p.x < -3 || p.x > w + 3 || p.y < -3 || p.y > h + 3) continue;
 
         ctx.globalAlpha = (.32 + .48 * (.5 + .5 * Math.sin(t * .4 + q.f))) * Math.min(1, p.s);
@@ -830,12 +1193,10 @@
       }
 
       ctx.globalAlpha = 1;
-
       const centro = projetar(0, 195, 0);
 
       if (centro) {
         const raio = Math.min(w * .48, 650) * centro.s;
-
         ctx.save();
         ctx.translate(centro.x, centro.y);
         ctx.scale(1, .27);
@@ -854,7 +1215,6 @@
       }
 
       const pulso = 1 + .008 * Math.sin(t * .32);
-
       ctx.save();
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
@@ -874,7 +1234,6 @@
 
       ctx.restore();
       ctx.globalAlpha = 1;
-
       desenharLetra(ms);
       requestAnimationFrame(desenhar);
     }
@@ -935,14 +1294,12 @@
     function mostrarVersiculo(indice) {
       versoAtual = (indice + VERSICULOS.length) % VERSICULOS.length;
       const v = VERSICULOS[versoAtual];
-
       versoEl.classList.add("trocando");
 
       setTimeout(() => {
         versoEl.innerHTML =
           "<blockquote>“" + v.texto + "”</blockquote><figcaption>" +
           v.ref + "</figcaption>";
-
         versoEl.classList.remove("trocando");
 
         [...dotsEl.children].forEach((d, i) =>
@@ -974,7 +1331,6 @@
       intro.classList.add("hide");
       audio.currentTime = 0;
       audio.play().catch(() => {});
-
       warpStart = performance.now();
       warpCanvas.classList.add("on");
       requestAnimationFrame(desenharWarp);
@@ -1000,7 +1356,6 @@
 
     canvas.addEventListener("pointermove", e => {
       if (!pointers.has(e.pointerId)) return;
-
       pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
       if (pointers.size >= 2) {
@@ -1039,7 +1394,6 @@
       if (e.key === "ArrowLeft") mostrarVersiculo(versoAtual - 1);
     });
 
-    // Pétalas distribuídas por toda a seção.
     const petalasEl = document.getElementById("petalas");
 
     for (let i = 0; i < 100; i++) {
@@ -1064,32 +1418,24 @@
 
     const clamp01 = v => Math.max(0, Math.min(1, v));
     const suavizar = t => t * t * (3 - 2 * t);
-    // Fração de uma fase do scroll, com curva suave (0 → 1).
     const fase = (p, inicio, fim) => suavizar(clamp01((p - inicio) / (fim - inicio)));
 
-    /*
-      Uma única linha do tempo para a seção inteira:
-      p = 0 quando a seção acabou de entrar por baixo da tela (já no primeiro scroll)
-      p = 1 quando ela já saiu por cima.
-      Assim nada fica "parado" esperando, e cada etapa acontece no scroll certo.
-    */
     function atualizarCenaAlianca() {
       const rect = secaoAliancas.getBoundingClientRect();
       const p = clamp01((innerHeight - rect.top) / secaoAliancas.offsetHeight);
 
-      const dissolver = fase(p, 0, .2);     // a galáxia some
-      const subida    = fase(p, .02, .42);  // a caixa sobe e centraliza
-      const abertura  = fase(p, .5, .8);    // a tampa abre (palco já fixo)
-      const anel      = fase(p, .62, .9);   // o anel aparece
-      const legenda   = fase(p, .86, .99);  // a frase final
+      const dissolver = fase(p, 0, .2);
+      const subida = fase(p, .02, .42);
+      const abertura = fase(p, .5, .8);
+      const anel = fase(p, .62, .9);
+      const legenda = fase(p, .86, .99);
 
-      const y = 62 * (1 - subida);
+      const y = 102 * (1 - subida);
       const escala = .9 + .1 * subida;
 
       caixaMovimento.style.opacity = clamp01(subida * 2.5).toFixed(3);
       caixaMovimento.style.transform =
         `translate3d(-50%, calc(-50% + ${y.toFixed(2)}vh), 0) scale(${escala.toFixed(3)})`;
-
       tampaCaixa.style.transform = `rotateX(${(-165 * abertura).toFixed(2)}deg)`;
 
       anelBerco.style.opacity = anel.toFixed(3);
@@ -1122,6 +1468,224 @@
     redimensionar();
     mostrarVersiculo(0);
     requestAnimationFrame(desenhar);
+  </script>
+
+  <script>
+    const petalasArvore = document.getElementById("petalasArvore");
+
+    for (let i = 0; i < 84; i++) {
+      const petala = document.createElement("i");
+      petala.className = "petala";
+      petala.style.setProperty("--left", Math.random() * 100 + "%");
+      petala.style.setProperty("--size", 10 + Math.random() * 18 + "px");
+      petala.style.setProperty("--duration", 28 + Math.random() * 12 + "s");
+      petala.style.setProperty("--delay", -Math.random() * 40 + "s");
+      petala.style.setProperty("--drift", (Math.random() - .5) * 210 + "px");
+      petala.style.setProperty("--spin", 300 + Math.random() * 700 + "deg");
+      petala.style.setProperty("--opacity", (.45 + Math.random() * .45).toFixed(2));
+      petala.style.setProperty("--softness", Math.random() * .7 + "px");
+      petalasArvore.append(petala);
+    }
+
+    const arvoreSection = document.getElementById("arvoreAmor");
+    const arteArvore = document.getElementById("arteArvore");
+    const progressoEntre = (p, inicio, fim) =>
+      Math.max(0, Math.min(1, (p - inicio) / (fim - inicio)));
+
+    function crescerArvore() {
+      const rect = arvoreSection.getBoundingClientRect();
+      const p = Math.max(
+        0,
+        Math.min(1, (innerHeight - rect.top) / arvoreSection.offsetHeight)
+      );
+      const revelar = progressoEntre(p, .02, .84);
+      arteArvore.style.clipPath =
+        `inset(0 0 ${(100 - revelar * 100).toFixed(2)}% 0)`;
+      arteArvore.style.opacity = Math.min(1, revelar * 5).toFixed(3);
+      arvoreSection.classList.toggle("floresceu", revelar >= 1);
+    }
+
+    let crescimentoPendente = false;
+
+    window.addEventListener("scroll", () => {
+      if (crescimentoPendente) return;
+      crescimentoPendente = true;
+
+      requestAnimationFrame(() => {
+        crescimentoPendente = false;
+        crescerArvore();
+      });
+    }, { passive: true });
+
+    window.addEventListener("resize", crescerArvore);
+
+    const idiomasAmor = [
+      ["English", "I love you"], ["Español", "Te amo"], ["Français", "Je t’aime"],
+      ["Italiano", "Ti amo"], ["Deutsch", "Ich liebe dich"], ["Nederlands", "Ik hou van jou"],
+      ["Svenska", "Jag älskar dig"], ["Norsk", "Jeg elsker deg"], ["Dansk", "Jeg elsker dig"],
+      ["Suomi", "Rakastan sinua"], ["Íslenska", "Ég elska þig"], ["Polski", "Kocham cię"],
+      ["Čeština", "Miluji tě"], ["Slovenčina", "Ľúbim ťa"], ["Magyar", "Szeretlek"],
+      ["Română", "Te iubesc"], ["Ελληνικά", "Σ’ αγαπώ"], ["Русский", "Я тебя люблю"],
+      ["Українська", "Я тебе кохаю"], ["Türkçe", "Seni seviyorum"], ["العربية", "أحبك"],
+      ["עברית", "אני אוהב אותך"], ["فارسی", "دوستت دارم"], ["हिन्दी", "मैं तुमसे प्यार करता हूँ"],
+      ["বাংলা", "আমি তোমায় ভালোবাসি"], ["اردو", "میں تم سے محبت کرتا ہوں"], ["中文", "我爱你"],
+      ["日本語", "愛してる"], ["한국어", "사랑해"], ["ไทย", "ฉันรักคุณ"],
+      ["Tiếng Việt", "Anh yêu em"], ["Bahasa Indonesia", "Aku cinta kamu"], ["Bahasa Melayu", "Saya cinta padamu"],
+      ["Filipino", "Mahal kita"], ["Kiswahili", "Nakupenda"], ["isiZulu", "Ngiyakuthanda"],
+      ["Yorùbá", "Mo nífẹ̀ẹ́ rẹ"], ["ʻŌlelo Hawaiʻi", "Aloha wau iā ʻoe"],
+      ["Gaeilge", "Tá grá agam duit"], ["Cymraeg", "Rwy’n dy garu di"]
+    ];
+
+    const botaoAmor = document.getElementById("botaoAmor");
+    const chuvaFrases = document.getElementById("chuvaFrases");
+    const ajudaArvore = document.getElementById("arvoreAjuda");
+    let filaIdiomas = [];
+
+    function embaralharIdiomas() {
+      filaIdiomas = [...idiomasAmor];
+
+      for (let i = filaIdiomas.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [filaIdiomas[i], filaIdiomas[j]] = [filaIdiomas[j], filaIdiomas[i]];
+      }
+    }
+
+    botaoAmor.addEventListener("click", () => {
+      if (!filaIdiomas.length) embaralharIdiomas();
+      const [idioma, frase] = filaIdiomas.pop();
+
+      arteArvore.classList.remove("onda-amor");
+      void arteArvore.getBoundingClientRect();
+      arteArvore.classList.add("onda-amor");
+      window.setTimeout(() => arteArvore.classList.remove("onda-amor"), 900);
+
+      const palavra = document.createElement("span");
+      palavra.className = "frase-caida";
+      palavra.style.setProperty("--drift", (Math.random() * 42 - 21) + "vw");
+      palavra.style.setProperty("--tilt", (Math.random() * 18 - 9) + "deg");
+      palavra.setAttribute("aria-label", `${frase} — ${idioma}`);
+
+      const texto = document.createElement("span");
+      texto.textContent = frase;
+      const legenda = document.createElement("small");
+      legenda.textContent = idioma;
+
+      palavra.append(texto, legenda);
+      chuvaFrases.append(palavra);
+      ajudaArvore.textContent = `${frase} · ${idioma} — mais uma forma de dizer “eu te amo”.`;
+
+      while (chuvaFrases.children.length > 12) {
+        chuvaFrases.firstElementChild.remove();
+      }
+
+      window.setTimeout(() => {
+        if (palavra.isConnected) palavra.classList.add("frase-no-chao");
+      }, 1650);
+    });
+
+    crescerArvore();
+
+    const secaoFinal = document.getElementById("finalJuntos");
+    const petalasFinal = document.getElementById("petalasFinal");
+    const arenaBotoes = document.getElementById("arenaBotoes");
+    const botaoAceito = document.getElementById("aceito");
+    const botaoDesculpa = document.getElementById("desculpa");
+    const mensagemFinal = document.getElementById("mensagemFinal");
+
+    for (let i = 0; i < 58; i++) {
+      const petala = document.createElement("i");
+      petala.className = "petala";
+      petala.style.setProperty("--left", Math.random() * 100 + "%");
+      petala.style.setProperty("--size", 9 + Math.random() * 17 + "px");
+      petala.style.setProperty("--duration", 24 + Math.random() * 14 + "s");
+      petala.style.setProperty("--delay", -Math.random() * 36 + "s");
+      petala.style.setProperty("--drift", (Math.random() - .5) * 190 + "px");
+      petala.style.setProperty("--spin", 280 + Math.random() * 720 + "deg");
+      petala.style.setProperty("--opacity", (.4 + Math.random() * .5).toFixed(2));
+      petala.style.setProperty("--softness", Math.random() * .6 + "px");
+      petalasFinal.append(petala);
+    }
+
+    function escaparDoCursor(event) {
+      if (secaoFinal.classList.contains("accepted")) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      const maxX = Math.max(0, arenaBotoes.clientWidth - botaoDesculpa.offsetWidth);
+      const maxY = Math.max(0, arenaBotoes.clientHeight - botaoDesculpa.offsetHeight);
+      const atualX = parseFloat(botaoDesculpa.style.left) || arenaBotoes.clientWidth * .62;
+      const atualY = parseFloat(botaoDesculpa.style.top) || 26;
+      let x = atualX, y = atualY;
+
+      for (let tentativa = 0; tentativa < 10; tentativa++) {
+        x = Math.random() * maxX;
+        y = Math.random() * maxY;
+        if (Math.hypot(x - atualX, y - atualY) > 95) break;
+      }
+
+      botaoDesculpa.style.left = `${x}px`;
+      botaoDesculpa.style.top = `${y}px`;
+    }
+
+    botaoDesculpa.addEventListener("pointerenter", escaparDoCursor);
+    botaoDesculpa.addEventListener("pointerdown", escaparDoCursor);
+    botaoDesculpa.addEventListener("touchstart", escaparDoCursor, { passive: false });
+    botaoDesculpa.addEventListener("focus", escaparDoCursor);
+    botaoDesculpa.addEventListener("click", escaparDoCursor);
+    botaoDesculpa.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") escaparDoCursor(event);
+    });
+
+    function soltarCachoeiraDePetalas() {
+      const chuva = document.createElement("div");
+      chuva.id = "cachoeiraPetalas";
+      chuva.setAttribute("aria-hidden", "true");
+      document.body.append(chuva);
+
+      const movimentoReduzido = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const quantidade = movimentoReduzido ? 72 : 260;
+      const cores = [
+        ["#ff7771", "#f23636", "#a8071a", "#ff4949aa"],
+        ["#ffc1b5", "#ec5362", "#9b1530", "#f2363688"],
+        ["#ffe0b5", "#d84a4a", "#8c1022", "#ffd0a088"]
+      ];
+
+      for (let i = 0; i < quantidade; i++) {
+        const cor = cores[Math.floor(Math.random() * cores.length)];
+        const petala = document.createElement("i");
+        petala.className = "petala-festiva";
+        petala.style.setProperty("--x", Math.random() * 100 + "%");
+        petala.style.setProperty("--tamanho", 12 + Math.random() * 25 + "px");
+        petala.style.setProperty(
+          "--duracao",
+          (movimentoReduzido ? .8 : 3.8 + Math.random() * 3.2) + "s"
+        );
+        petala.style.setProperty(
+          "--atraso",
+          (movimentoReduzido ? 0 : Math.random() * 2.4) + "s"
+        );
+        petala.style.setProperty("--deriva", (Math.random() * 300 - 150) + "px");
+        petala.style.setProperty("--giro", (Math.random() * 1100 - 550) + "deg");
+        petala.style.setProperty("--cor-clara", cor[0]);
+        petala.style.setProperty("--cor-petala", cor[1]);
+        petala.style.setProperty("--cor-escura", cor[2]);
+        petala.style.setProperty("--brilho", cor[3]);
+        chuva.append(petala);
+      }
+
+      window.setTimeout(() => chuva.remove(), movimentoReduzido ? 1400 : 8500);
+    }
+
+    botaoAceito.addEventListener("click", () => {
+      if (secaoFinal.classList.contains("accepted")) return;
+
+      secaoFinal.classList.add("accepted");
+      botaoAceito.disabled = true;
+      botaoDesculpa.disabled = true;
+      soltarCachoeiraDePetalas();
+      window.setTimeout(() => mensagemFinal.classList.add("mostrar"), 650);
+    });
   </script>
 </body>
 </html>
